@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ath.bondoman.databinding.FragmentTransactionBinding
+import com.ath.bondoman.viewmodel.TransactionViewModel
 
 class TransactionFragment : Fragment() {
 

@@ -1,4 +1,4 @@
-package com.ath.bondoman.ui.chart
+package com.ath.bondoman.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

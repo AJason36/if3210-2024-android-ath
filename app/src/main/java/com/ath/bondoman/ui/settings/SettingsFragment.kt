@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.ath.bondoman.databinding.FragmentSettingsBinding
+import com.ath.bondoman.viewmodel.SettingsViewModel
 
 class SettingsFragment : Fragment() {
 
