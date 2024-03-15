@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Bondo Man</string>
+    <string name="title_chart">Chart</string>
+    <string name="title_transaction">Transaction</string>
+    <string name="title_scan">Scan</string>
+    <string name="title_settings">Settings</string>
+</resources>

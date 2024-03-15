@@ -1,0 +1,56 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.BondoMan" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/green_400</item>
+        <item name="colorPrimaryVariant">@color/green_700</item>
+        <item name="colorOnPrimary">@color/cream_400</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/gray_300</item>
+        <item name="colorSecondaryVariant">@color/gray_400</item>
+        <item name="colorOnSecondary">@color/gray_700</item>
+
+        <item name="colorError">@color/rose_400</item>
+        <item name="colorOnError">@color/gray_300</item>
+
+        <item name="colorTertiary">@color/gray_300</item>
+        <item name="colorOnTertiary">@color/gray_600</item>
+
+
+        <item name="android:colorBackground">@color/white</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+
+        <item name="android:windowSplashScreenBackground">?attr/colorPrimary</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_logo_fg</item>
+    </style>
+
+</resources>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
