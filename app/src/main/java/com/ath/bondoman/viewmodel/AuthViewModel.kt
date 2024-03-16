@@ -25,8 +25,4 @@ class AuthViewModel @Inject constructor(
     ) {
         apiRequestFlow{authClient.login(payload)}
     }
-
-    suspend fun saveToken(token: String) {
-        tokenRepository.saveToken(token)
-    }
 }

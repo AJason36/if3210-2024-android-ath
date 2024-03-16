@@ -1,18 +1,24 @@
 package com.ath.bondoman.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import com.ath.bondoman.LoginActivity
 import com.ath.bondoman.databinding.FragmentSettingsBinding
 import com.ath.bondoman.viewmodel.SettingsViewModel
+import com.ath.bondoman.viewmodel.TokenViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class SettingsFragment : Fragment() {
+@AndroidEntryPoint
+class SettingsFragment  : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
+    private val tokenViewModel: TokenViewModel by viewModels()
+    private val settingsViewModel: SettingsViewModel by viewModels()
 
     private val binding get() = _binding!!
 
@@ -21,18 +27,19 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val settingsViewModel =
-            ViewModelProvider(this).get(SettingsViewModel::class.java)
-
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textSettings
-        settingsViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        val logoutButton = binding.logoutButton
+        logoutButton.setOnClickListener {
+            tokenViewModel.removeToken()
+
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+            requireActivity().finish()
         }
         return root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

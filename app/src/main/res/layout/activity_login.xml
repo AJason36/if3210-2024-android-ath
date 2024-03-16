@@ -29,14 +29,15 @@
                 android:layout_height="wrap_content"
                 android:text="Welcome Back"
                 android:textColor="?attr/colorPrimaryVariant"
-                android:textSize="32sp"
+                android:textSize="@dimen/text_size_xl"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Please login to your account to start using BondoMan"
-                android:textColor="?attr/colorOnTertiary">
+                android:textColor="?attr/colorOnTertiary"
+                android:textSize="@dimen/text_size_sm">
 
             </TextView>
 
@@ -46,7 +47,8 @@
                 android:layout_marginTop="20dp"
                 android:text="Email"
                 android:textColor="?attr/colorOnTertiary"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_xs"/>
 
             <EditText
                 android:id="@+id/email_edit_text"
@@ -54,7 +56,8 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_mail"
                 android:drawablePadding="8dp"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:textSize="@dimen/text_size_xs"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -62,7 +65,8 @@
                 android:layout_marginTop="20dp"
                 android:text="Password"
                 android:textColor="?attr/colorOnTertiary"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_sm"/>
 
             <EditText
                 android:id="@+id/password_edit_text"
@@ -70,7 +74,8 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_lock"
                 android:drawablePadding="8dp"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textSize="@dimen/text_size_xs"/>
 
 
             <Button

@@ -24,6 +24,60 @@
 
         <item name="android:windowSplashScreenBackground">?attr/colorPrimary</item>
         <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_logo_fg</item>
+
+    </style>
+
+    <style name="Button.Error" parent="Widget.Material3.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">?attr/colorOnError</item>
+        <item name="android:textSize">@dimen/text_size_sm</item>
+        <item name="android:background">@drawable/bg_button_destructive</item>
+        <item name="android:backgroundTint">@color/rose_400</item>
+        <item name="android:outlineProvider">none</item>
+    </style>
+
+    <style name="Button.Primary" parent="Widget.AppCompat.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textSize">@dimen/text_size_sm</item>
+        <item name="android:background">@drawable/bg_primary_button</item>
+        <item name="android:outlineProvider">none</item>
+    </style>
+
+    <style name="Button.Ghost" parent="Widget.MaterialComponents.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_size_sm</item>
+        <item name="android:backgroundTint">@color/transparent</item>
+        <item name="android:textColor">?attr/colorOnTertiary</item>
+        <item name="android:outlineProvider">none</item>
+    </style>
+
+
+
+    <!-- Text sizes -->
+    <dimen name="text_size_xs">12sp</dimen>
+    <dimen name="text_size_sm">16sp</dimen>
+    <dimen name="text_size_md">18sp</dimen>
+    <dimen name="text_size_lg">24sp</dimen>
+    <dimen name="text_size_xl">32sp</dimen>
+    <dimen name="text_size_2xl">48sp</dimen>
+
+    <!-- Corner radii -->
+    <dimen name="corner_sm">12dp</dimen>
+    <dimen name="corner_md">16dp</dimen>
+    <dimen name="corner_lg">20dp</dimen>
+
+    <!-- Styles -->
+    <style name="Text.Small" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/text_size_sm</item>
+    </style>
+
+    <style name="Text.Medium" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/text_size_md</item>
+    </style>
+
+    <style name="Text.Large" parent="android:TextAppearance">
+        <item name="android:textSize">@dimen/text_size_lg</item>
     </style>
 
 </resources>

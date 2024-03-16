@@ -26,7 +26,19 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         checkToken()
+    }
+    private fun checkToken() {
+        tokenViewModel.token.observe(this)  { token ->
+            if (token != null) {
+                startActivity(Intent(this, MainActivity::class.java))
+                finish()
+            } else {
+                initializeLoginView()
+            }
+        }
+    }
 
+    private fun initializeLoginView() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -34,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
             val emailEt = findViewById<EditText>(R.id.email_edit_text)
             val passwordEt = findViewById<EditText>(R.id.password_edit_text)
             val payload = LoginPayload(emailEt.text.toString(), passwordEt.text.toString())
-            authViewModel.login(payload, object: CoroutinesErrorHandler {
+            authViewModel.login(payload, object : CoroutinesErrorHandler {
                 override fun onError(message: String) {
                     Snackbar.make(findViewById(R.id.container), message, Snackbar.LENGTH_SHORT).show()
                 }
@@ -54,14 +66,6 @@ class LoginActivity : AppCompatActivity() {
             }
 
             Snackbar.make(findViewById(R.id.container), msg, Snackbar.LENGTH_SHORT).show()
-        }
-    }
-    private fun checkToken() {
-        tokenViewModel.token.observe(this)  { token ->
-            if (token != null) {
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
-            }
         }
     }
 }

@@ -15,4 +15,5 @@
     <color name="gray_600">#71717a</color>
     <color name="gray_700">#18181b</color>
     <color name="rose_400">#f26a6a</color>
+    <color name="transparent">#00000000</color>
 </resources>

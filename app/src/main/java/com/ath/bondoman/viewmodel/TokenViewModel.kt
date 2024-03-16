@@ -35,7 +35,7 @@ class TokenViewModel @Inject constructor(
         }
     }
 
-    fun deleteToken() {
+    fun removeToken() {
         viewModelScope.launch(Dispatchers.IO) {
             tokenRepository.removeToken()
         }
