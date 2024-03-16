@@ -3,11 +3,11 @@ package com.ath.bondoman.di
 import com.ath.bondoman.api.AuthClient
 import com.ath.bondoman.data.datastore.TokenDataStore
 import com.ath.bondoman.repository.TokenRepository
-import com.ath.bondoman.service.AuthService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 
@@ -19,5 +19,8 @@ class HiltModule {
     fun provideTokenRepository(tokenDataStore: TokenDataStore): TokenRepository = TokenRepository(tokenDataStore)
 
     @Provides
-    fun provideAuthService(authClient: AuthClient): AuthService = AuthService(authClient)
+    fun provideAuthClient(retrofit: Retrofit.Builder): AuthClient =
+        retrofit
+            .build()
+            .create(AuthClient::class.java)
 }
