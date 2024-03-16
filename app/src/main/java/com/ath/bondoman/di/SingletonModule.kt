@@ -47,11 +47,4 @@ class SingletonModule {
             .baseUrl("https://pbd-backend-2024.vercel.app/api/")
             .addConverterFactory(GsonConverterFactory.create())
 
-    @Singleton
-    @Provides
-    fun provideAuthClient(retrofit: Retrofit.Builder): AuthClient =
-        retrofit
-            .build()
-            .create(AuthClient::class.java)
-
 }
