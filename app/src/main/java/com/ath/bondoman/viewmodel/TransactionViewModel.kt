@@ -1,18 +1,17 @@
 package com.ath.bondoman.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.ath.bondoman.model.Transaction
-import com.ath.bondoman.model.dto.TransactionDTO
+import com.ath.bondoman.model.dto.InsertTransactionDTO
+import com.ath.bondoman.model.dto.UpdateTransactionDTO
 import com.ath.bondoman.repository.TransactionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -27,8 +26,10 @@ class TransactionViewModel @Inject constructor(private val repository: Transacti
 
     private val _insertResult = MutableLiveData<Long>()
     val insertResult: LiveData<Long> = _insertResult
+    private val _updateResult = MutableLiveData<Int>()
+    val updateResult: LiveData<Int> = _updateResult
 
-    fun insertTransaction(transactionDTO: TransactionDTO) {
+    fun insertTransaction(transactionDTO: InsertTransactionDTO) {
         viewModelScope.launch {
             val transaction = Transaction(
                 title = transactionDTO.title,
@@ -41,12 +42,23 @@ class TransactionViewModel @Inject constructor(private val repository: Transacti
             }
             _insertResult.value = rowId
 
-            Log.d("TransactionViewModel", "Transaction inserted with row ID: $rowId")
         }
     }
 
-    private fun isTransactionInserted(transaction: Transaction): Boolean {
-        val transactions = allTransactions.value
-        return transactions?.contains(transaction) ?: false
+    fun updateTransaction(transactionDTO: UpdateTransactionDTO) {
+        viewModelScope.launch {
+            val transaction = Transaction(
+                id = transactionDTO.id,
+                title = transactionDTO.title,
+                category = transactionDTO.category,
+                amount = transactionDTO.amount,
+                location = transactionDTO.location,
+                date = transactionDTO.date
+            )
+            val rowId = withContext(Dispatchers.IO) {
+                repository.update(transaction)
+            }
+            _updateResult.value = rowId
+        }
     }
 }

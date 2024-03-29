@@ -16,19 +16,19 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/addTransactionBackBtn"
+            android:id="@+id/transactionFormBackBtn"
             android:layout_width="38dp"
             android:layout_height="38dp"
             android:layout_alignParentStart="true"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/add_transaction_back_button"
+            android:contentDescription="@string/transaction_form_back_button"
             android:src="@drawable/ic_back_button" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/title_add_transaction"
+            android:text="@string/title_transaction_form"
             android:textSize="28sp"
             android:textStyle="bold" />
 
@@ -42,18 +42,29 @@
         app:layout_constraintTop_toBottomOf="@+id/headerLinearLayout"
         tools:layout_editor_absoluteX="0dp">
 
-        <!-- Title -->
+        <!-- Date -->
         <TextView
-            android:id="@+id/add_transaction_title_label"
+            android:id="@+id/transaction_form_date_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_transaction_title_label"
+            android:drawablePadding="8dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="@dimen/text_size_sm"
+            android:autofillHints="transactionDate"
+            android:gravity="end" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/transaction_form_title_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/transaction_form_title_label"
             android:textSize="@dimen/text_size_sm"
             android:textStyle="bold"
-            android:labelFor="@+id/add_transaction_title_field" />
+            android:labelFor="@+id/transaction_form_title_field" />
 
         <EditText
-            android:id="@+id/add_transaction_title_field"
+            android:id="@+id/transaction_form_title_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="8dp"
@@ -64,16 +75,16 @@
 
         <!-- Amount -->
         <TextView
-            android:id="@+id/add_transaction_amount_label"
+            android:id="@+id/transaction_form_amount_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_transaction_amount_label"
+            android:text="@string/transaction_form_amount_label"
             android:textSize="@dimen/text_size_sm"
             android:textStyle="bold"
-            android:labelFor="@+id/add_transaction_amount_field" />
+            android:labelFor="@+id/transaction_form_amount_field" />
 
         <EditText
-            android:id="@+id/add_transaction_amount_field"
+            android:id="@+id/transaction_form_amount_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawablePadding="8dp"
@@ -84,16 +95,16 @@
 
         <!-- Category -->
         <TextView
-            android:id="@+id/add_transaction_category_label"
+            android:id="@+id/transaction_form_category_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_transaction_category_label"
+            android:text="@string/transaction_form_category_label"
             android:textSize="@dimen/text_size_sm"
             android:textStyle="bold"
-            android:labelFor="@+id/add_transaction_category_field" />
+            android:labelFor="@+id/transaction_form_category_field" />
 
         <Spinner
-            android:id="@+id/add_transaction_category_field"
+            android:id="@+id/transaction_form_category_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
@@ -101,10 +112,10 @@
 
         <!-- Location -->
         <TextView
-            android:id="@+id/add_transaction_location_label"
+            android:id="@+id/transaction_form_location_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_transaction_location_label"
+            android:text="@string/transaction_form_location_label"
             android:textSize="@dimen/text_size_sm"
             android:textStyle="bold"
             android:labelFor="@+id/location_field" />
@@ -117,21 +128,21 @@
 
             <!-- Location Button -->
             <ImageButton
-                android:id="@+id/add_transaction_location_button"
+                android:id="@+id/transaction_form_location_button"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:src="@drawable/ic_location"
-                android:contentDescription="@string/add_transaction_location_button" />
+                android:contentDescription="@string/transaction_form_location_button" />
 
             <!-- Location Text Field -->
             <TextView
-                android:id="@+id/add_transaction_location_field"
+                android:id="@+id/transaction_form_location_field"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@id/add_transaction_location_button"
+                android:layout_toStartOf="@id/transaction_form_location_button"
                 android:textSize="@dimen/text_size_sm"
-                android:text="@string/add_transaction_default_location_text"
+                android:text="@string/transaction_form_default_location_text"
                 android:maxLines="3"
                 android:ellipsize="end" />
         </RelativeLayout>

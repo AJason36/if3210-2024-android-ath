@@ -1,5 +1,6 @@
 package com.ath.bondoman.ui.transaction
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.ath.bondoman.R
+import com.ath.bondoman.TransactionFormActivity
 import com.ath.bondoman.databinding.TransactionListItemBinding
 import com.ath.bondoman.model.Transaction
 
@@ -36,6 +38,15 @@ class TransactionListAdapter : RecyclerView.Adapter<TransactionListAdapter.Trans
         holder.title.text = transaction.title
         holder.amount.text = transaction.amount.toString()
         holder.location.text = transaction.location?.address
+
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, TransactionFormActivity::class.java).apply {
+                putExtra(TransactionFormActivity.EXTRA_TRANSACTION, transaction)
+                putExtra(TransactionFormActivity.EXTRA_MODE, TransactionFormActivity.MODE_UPDATE)
+            }
+            context.startActivity(intent)
+        }
     }
 
     override fun getItemCount() = transactions.size
