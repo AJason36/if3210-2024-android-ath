@@ -16,7 +16,7 @@
         app:cardCornerRadius="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:cardElevation="0dp"
-        android:backgroundTint="?attr/colorSecondary">
+        android:backgroundTint="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,6 +60,21 @@
                 android:hint="Enter your email"/>
 
             <TextView
+                android:id="@+id/email_error_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email is required"
+                android:textColor="?attr/colorError"
+                android:textStyle="italic"
+                android:textSize="@dimen/text_size_xs"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </LinearLayout>
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -78,6 +93,24 @@
                 android:textSize="@dimen/text_size_xs"
                 android:hint="Enter your password"/>
 
+            <TextView
+                android:id="@+id/password_error_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Password is required"
+                android:textColor="?attr/colorError"
+                android:textStyle="italic"
+                android:textSize="@dimen/text_size_xs"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/login_error_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorError"
+                android:textStyle="italic"
+                android:textSize="@dimen/text_size_xs"
+                android:visibility="gone" />
 
             <Button
                 android:id="@+id/login_button"

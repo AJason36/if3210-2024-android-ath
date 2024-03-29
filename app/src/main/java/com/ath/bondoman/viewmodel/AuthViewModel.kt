@@ -13,7 +13,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val authClient: AuthClient,
-    private val tokenRepository: TokenRepository
 ): BaseViewModel() {
 
     private val _loginResponse = MutableLiveData<ApiResponse<LoginResponse>>()

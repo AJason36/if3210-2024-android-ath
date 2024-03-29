@@ -3,11 +3,14 @@ package com.ath.bondoman
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.ath.bondoman.databinding.ActivityLoginBinding
+import com.ath.bondoman.model.Token
 import com.ath.bondoman.model.dto.ApiResponse
 import com.ath.bondoman.model.dto.LoginPayload
 import com.ath.bondoman.viewmodel.AuthViewModel
@@ -24,9 +27,9 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         checkToken()
     }
+
     private fun checkToken() {
         tokenViewModel.token.observe(this)  { token ->
             if (token != null) {
@@ -42,30 +45,67 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        findViewById<Button>(R.id.login_button).setOnClickListener {
-            val emailEt = findViewById<EditText>(R.id.email_edit_text)
-            val passwordEt = findViewById<EditText>(R.id.password_edit_text)
-            val payload = LoginPayload(emailEt.text.toString(), passwordEt.text.toString())
-            authViewModel.login(payload, object : CoroutinesErrorHandler {
-                override fun onError(message: String) {
-                    Snackbar.make(findViewById(R.id.container), message, Snackbar.LENGTH_SHORT).show()
-                }
-            })
+        val loginButton = binding.loginButton
+        val emailEt =  binding.emailEditText
+        val passwordEt = binding.passwordEditText
+        val emailErrorTextView = binding.emailErrorText
+        val passwordErrorTextView = binding.passwordErrorText
+        val loginErrorText = binding.loginErrorText
+
+        loginButton.setOnClickListener {
+            val email = emailEt.text.toString()
+            val password = passwordEt.text.toString()
+            val payload = LoginPayload(email, password)
+            Log.d("DEBUG", email)
+            Log.d("DEBUG", password)
+
+            if (email.isEmpty()) {
+                emailErrorTextView.visibility = View.VISIBLE
+            } else {
+                emailErrorTextView.visibility = View.GONE
+            }
+
+            if (password.isEmpty()) {
+                passwordErrorTextView.visibility = View.VISIBLE
+            } else {
+                passwordErrorTextView.visibility = View.GONE
+            }
+
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                authViewModel.login(payload, object : CoroutinesErrorHandler {
+                    override fun onError(message: String) {
+                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
         }
 
         authViewModel.loginResponse.observe(this) { response ->
-            val msg = when (response) {
-                is ApiResponse.Failure -> response.message
-                ApiResponse.Loading -> "loading"
-                is ApiResponse.Success -> {
-                    val token = response.data.token
-                    tokenViewModel.saveToken(token)
-                    token
+            Log.d("DEBUG", response.toString())
+            when (response) {
+                is ApiResponse.Failure -> {
+                    Log.d("DEBUG", "naurrrr")
+                    val errorMessage = when {
+                        response.code == 400 || response.code == 401 -> "Invalid username or password"
+                        response.message.contains("Unable to resolve host") -> "Device not connected to the internet"
+                        else -> response.message
+                    }
+                    loginErrorText.text = errorMessage
+                    loginErrorText.visibility = View.VISIBLE
                 }
-                else -> "Unknown response"
-            }
 
-            Snackbar.make(findViewById(R.id.container), msg, Snackbar.LENGTH_SHORT).show()
+                is ApiResponse.Success -> {
+                    Log.d("DEBUG", "masuk sini")
+                    loginErrorText.visibility = View.GONE
+                    val token = Token(response.data.token, binding.emailEditText.text.toString())
+                    tokenViewModel.saveToken(token)
+                    Toast.makeText(applicationContext, "Login successful", Toast.LENGTH_SHORT).show()
+                }
+
+                else -> {
+                }
+            }
         }
+
     }
 }
