@@ -24,6 +24,9 @@ import android.widget.Toast
 import com.ath.bondoman.model.dto.TransactionDTO
 import com.ath.bondoman.viewmodel.TransactionViewModel
 import androidx.activity.viewModels
+import com.ath.bondoman.model.LocationData
+import com.ath.bondoman.util.isLocationPermissionGranted
+import com.ath.bondoman.util.showLocationPermissionDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,9 +36,9 @@ class AddTransactionActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityAddTransactionBinding
-    private lateinit var locationViewModel: LocationViewModel
-
+    private val locationViewModel: LocationViewModel by viewModels()
     private val transactionViewModel: TransactionViewModel by viewModels()
+    private var currentLocation: LocationData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,15 +61,22 @@ class AddTransactionActivity : AppCompatActivity() {
         val spinnerPosition = adapter.getPosition(defaultCategory)
         binding.addTransactionCategoryField.setSelection(spinnerPosition)
 
-        // Initialize the Location ViewModel
-        locationViewModel = ViewModelProvider(this).get(LocationViewModel::class.java)
-
         // Observe the location LiveData
         locationViewModel.location.observe(this, Observer { newLocation ->
-            binding.addTransactionLocationField.text = newLocation
+            currentLocation = newLocation
+            binding.addTransactionLocationField.text = currentLocation?.address
         })
 
-        checkLocationPermissionAndFetchLocation()
+        fetchLocation()
+
+        val locationButton = binding.addTransactionLocationButton
+        locationButton.setOnClickListener{
+            if (isLocationPermissionGranted(this)) {
+                fetchLocation()
+            } else {
+                showLocationPermissionDialog(this, packageName)
+            }
+        }
 
         val saveButton = binding.saveTransactionButton
         saveButton.setOnClickListener {
@@ -86,76 +96,23 @@ class AddTransactionActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
-            checkLocationPermissionAndFetchLocation()
+            fetchLocation()
         }
     }
 
-    private fun checkLocationPermissionAndFetchLocation() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-            == PackageManager.PERMISSION_GRANTED) {
-
-            binding.addTransactionEnableLocationButton.visibility = View.GONE
-
-            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location: Location? ->
-                    if (location != null) {
-                        val userFriendlyLocation = "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
-                        locationViewModel.updateLocation(userFriendlyLocation)
-                    }
-                }
-        } else {
-            showEnableLocationButton()
-        }
-    }
-
-    private fun showEnableLocationButton() {
-        val enableLocationBtn = binding.addTransactionEnableLocationButton
-        enableLocationBtn.visibility = View.VISIBLE
-
-        enableLocationBtn.setOnClickListener {
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_FINE_LOCATION)) {
-                ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION)
-            } else {
-                showPermissionExplanationDialog()
-            }
-        }
-
-        locationViewModel.updateLocation("Location is disabled")
-    }
-
-    private fun showPermissionExplanationDialog() {
-        AlertDialog.Builder(this)
-            .setTitle("Location Permission Needed")
-            .setMessage("This app needs the Location permission to get your current location. Please grant the permission.")
-            .setPositiveButton("Open Settings") { _, _ ->
-                // Intent to open the app's system settings
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                val uri = Uri.fromParts("package", packageName, null)
-                intent.data = uri
-                startActivity(intent)
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-            .show()
+    private fun fetchLocation() {
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        locationViewModel.fetchLocation(this, fusedLocationClient)
     }
 
     private fun saveTransaction() {
         val titleField = binding.addTransactionTitleField
         val amountField = binding.addTransactionAmountField
         val categorySpinner = binding.addTransactionCategoryField
-        val locationField = binding.addTransactionLocationField
 
         val title = titleField.text.toString()
         val amount = amountField.text.toString()
         val category = TransactionCategory.valueOf(categorySpinner.selectedItem.toString())
-        val location = locationField.text.toString()
 
         if (title.isEmpty()) {
             titleField.error = "Title cannot be empty"
@@ -168,7 +125,7 @@ class AddTransactionActivity : AppCompatActivity() {
         }
 
         // Create a TransactionDTO with the entered data
-        val transactionDTO = TransactionDTO(title, category, amount.toDouble(), location)
+        val transactionDTO = TransactionDTO(title, category, amount.toDouble(), currentLocation)
 
         // Get a reference to the ViewModel and insert the transaction
         transactionViewModel.insertTransaction(transactionDTO)

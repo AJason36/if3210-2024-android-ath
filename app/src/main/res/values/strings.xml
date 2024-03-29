@@ -20,4 +20,6 @@
     <string name="add_transaction_category_label">Category</string>
     <string name="add_transaction_location_label">Location</string>
     <string name="add_transaction_enable_location_btn">Enable Location</string>
+    <string name="add_transaction_default_location_text">Location is disabled</string>
+    <string name="add_transaction_location_button">Add Transaction Location Button</string>
 </resources>

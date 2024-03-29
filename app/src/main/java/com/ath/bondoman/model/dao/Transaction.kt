@@ -10,7 +10,7 @@ import com.ath.bondoman.model.Transaction
 
 @Dao
 interface TransactionDao {
-    @Query("SELECT * FROM transactions")
+    @Query("SELECT * FROM transactions ORDER BY date DESC")
     fun getAll(): LiveData<List<Transaction>>
 
     @Insert

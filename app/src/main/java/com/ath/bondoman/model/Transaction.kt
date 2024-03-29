@@ -11,16 +11,6 @@ enum class TransactionCategory {
     Income, Expenditure
 }
 
-@Entity(tableName = "transactions")
-data class Transaction(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val title: String,
-    val category: TransactionCategory,
-    val amount: Double,
-    val location: String,
-    val date: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-)
-
 class TransactionCategoryConverter {
     @TypeConverter
     fun toCategory(value: String) = enumValueOf<TransactionCategory>(value)
@@ -28,3 +18,15 @@ class TransactionCategoryConverter {
     @TypeConverter
     fun fromCategory(value: TransactionCategory) = value.name
 }
+
+@Entity(tableName = "transactions")
+data class Transaction(
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val title: String,
+    val category: TransactionCategory,
+    val amount: Double,
+    val location: LocationData?,
+    val date: String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+)
+
+
