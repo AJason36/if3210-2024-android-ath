@@ -1,10 +1,23 @@
 <resources>
     <string name="app_name">Bondo Man</string>
     <string name="title_chart">Chart</string>
-    <string name="title_transaction">Transaction</string>
     <string name="title_scan">Scan</string>
     <string name="title_settings">Settings</string>
     <string name="title_login">Login</string>
     <string name="take_photo">Take Photo</string>
     <string name="gallery_photo">Choose from Gallery</string>
+
+    <!-- Transaction -->
+    <string name="title_transaction">Transaction</string>
+    <string name="addTransactionBtn">Add Transaction Button</string>
+
+    <!-- Add Transaction -->
+    <string name="title_add_transaction">Add Transaction</string>
+    <string name="add_transaction_back_button">Back Button on Add Transaction</string>
+    <string name="save_transaction_button">Save</string>
+    <string name="add_transaction_title_label">Title</string>
+    <string name="add_transaction_amount_label">Amount</string>
+    <string name="add_transaction_category_label">Category</string>
+    <string name="add_transaction_location_label">Location</string>
+    <string name="add_transaction_enable_location_btn">Enable Location</string>
 </resources>

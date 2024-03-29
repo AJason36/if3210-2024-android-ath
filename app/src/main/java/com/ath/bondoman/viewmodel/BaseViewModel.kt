@@ -12,7 +12,7 @@ open class BaseViewModel : ViewModel() {
     protected fun <T> baseRequest(liveData: MutableLiveData<T>, errorHandler: CoroutinesErrorHandler, request: () -> Flow<T>) {
         mJob = viewModelScope.launch(Dispatchers.IO + CoroutineExceptionHandler { _, error ->
             viewModelScope.launch(Dispatchers.Main) {
-                errorHandler.onError(error.localizedMessage ?: "Unexpected error occured")
+                errorHandler.onError(error.localizedMessage ?: "Unexpected error occurred")
             }
         }){
             request().collect {

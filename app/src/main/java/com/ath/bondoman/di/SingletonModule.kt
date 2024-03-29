@@ -1,10 +1,12 @@
 package com.ath.bondoman.di
 
+import android.app.Application
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
-import com.ath.bondoman.api.AuthClient
+import androidx.room.Room
+import com.ath.bondoman.data.database.AppDatabase
 import com.ath.bondoman.data.datastore.TokenDataStore
 import dagger.Module
 import dagger.Provides
@@ -47,4 +49,13 @@ class SingletonModule {
             .baseUrl("https://pbd-backend-2024.vercel.app/api/")
             .addConverterFactory(GsonConverterFactory.create())
 
+    @Singleton
+    @Provides
+    fun provideAppDatabase(app: Application): AppDatabase {
+        return Room.databaseBuilder(
+            app,
+            AppDatabase::class.java,
+            "app_database"
+        ).fallbackToDestructiveMigration().build()
+    }
 }
