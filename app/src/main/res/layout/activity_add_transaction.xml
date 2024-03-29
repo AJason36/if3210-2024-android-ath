@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_app_bar"
+        android:padding="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/addTransactionBackBtn"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_alignParentStart="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/add_transaction_back_button"
+            android:src="@drawable/ic_back_button" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/title_add_transaction"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="631dp"
+        android:orientation="vertical"
+        android:padding="28dp"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:layout_editor_absoluteX="0dp">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/add_transaction_title_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_transaction_title_label"
+            android:textColor="?attr/colorOnTertiary"
+            android:textSize="@dimen/text_size_sm"
+            android:textStyle="bold"
+            android:labelFor="@+id/add_transaction_title_field" />
+
+        <EditText
+            android:id="@+id/add_transaction_title_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:layout_marginBottom="10dp"
+            android:inputType="text"
+            android:textSize="@dimen/text_size_sm"
+            android:autofillHints="transactionTitle" />
+
+        <!-- Amount -->
+        <TextView
+            android:id="@+id/add_transaction_amount_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_transaction_amount_label"
+            android:textColor="?attr/colorOnTertiary"
+            android:textSize="@dimen/text_size_sm"
+            android:textStyle="bold"
+            android:labelFor="@+id/add_transaction_amount_field" />
+
+        <EditText
+            android:id="@+id/add_transaction_amount_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:layout_marginBottom="10dp"
+            android:inputType="numberDecimal"
+            android:textSize="@dimen/text_size_sm"
+            android:autofillHints="transactionAmount" />
+
+        <!-- Category -->
+        <TextView
+            android:id="@+id/add_transaction_category_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_transaction_category_label"
+            android:textColor="?attr/colorOnTertiary"
+            android:textSize="@dimen/text_size_sm"
+            android:textStyle="bold"
+            android:labelFor="@+id/add_transaction_category_field" />
+
+        <Spinner
+            android:id="@+id/add_transaction_category_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+        />
+
+        <!-- Location -->
+        <TextView
+            android:id="@+id/add_transaction_location_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_transaction_location_label"
+            android:textColor="?attr/colorOnTertiary"
+            android:textSize="@dimen/text_size_sm"
+            android:textStyle="bold"
+            android:labelFor="@+id/location_field" />
+
+        <TextView
+            android:id="@+id/add_transaction_location_field"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_sm"
+            android:layout_marginBottom="10dp" />
+
+        <Button
+            android:id="@+id/add_transaction_enable_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_transaction_enable_location_btn" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/save_transaction_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_primary_button"
+            android:text="@string/save_transaction_button"
+            android:textStyle="bold" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
