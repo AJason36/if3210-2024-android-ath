@@ -64,7 +64,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Password"
-                android:textColor="?attr/colorOnTertiary"
                 android:textStyle="bold"
                 android:textSize="@dimen/text_size_sm"/>
 
