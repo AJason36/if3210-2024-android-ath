@@ -1,11 +1,13 @@
 package com.ath.bondoman.model
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlinx.parcelize.Parcelize
 
 enum class TransactionCategory {
     Income, Expenditure
@@ -20,6 +22,7 @@ class TransactionCategoryConverter {
 }
 
 @Entity(tableName = "transactions")
+@Parcelize
 data class Transaction(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val title: String,
@@ -27,6 +30,6 @@ data class Transaction(
     val amount: Double,
     val location: LocationData?,
     val date: String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-)
+): Parcelable
 
 

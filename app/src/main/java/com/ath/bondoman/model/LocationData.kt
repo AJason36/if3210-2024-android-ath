@@ -1,14 +1,17 @@
 package com.ath.bondoman.model
 
+import android.os.Parcelable
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class LocationData(
     val latitude: Double,
     val longitude: Double,
     val address: String
-)
+) : Parcelable
 
 class LocationDataTypeConverter {
 
