@@ -1,9 +1,12 @@
 package com.ath.bondoman.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.ath.bondoman.data.datastore.TokenDataStore
+import com.ath.bondoman.model.Token
 import com.ath.bondoman.repository.TokenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,20 +19,9 @@ class TokenViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
 ): ViewModel() {
 
-    val token = MutableLiveData<String?>()
+    val token = tokenRepository.getToken().asLiveData(Dispatchers.IO)
 
-    init {
-        // get token on initialization on dispatchers.io scope
-        viewModelScope.launch(Dispatchers.IO) {
-            tokenRepository.getToken().collect {
-                withContext(Dispatchers.Main) {
-                    token.value = it
-                }
-            }
-        }
-    }
-
-    fun saveToken(token: String) {
+    fun saveToken(token: Token) {
         viewModelScope.launch(Dispatchers.IO) {
             tokenRepository.saveToken(token)
         }

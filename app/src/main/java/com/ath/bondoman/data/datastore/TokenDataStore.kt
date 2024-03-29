@@ -1,27 +1,35 @@
 package com.ath.bondoman.data.datastore
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.ath.bondoman.di.datastore
+import com.ath.bondoman.model.Token
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-
 
 class TokenDataStore(private val context: Context) {
     companion object {
         private val TOKEN_KEY = stringPreferencesKey("auth_token")
     }
-    // for now we only use one datastore (in the context singleton) which 8is the token datastore
-    fun getToken(): Flow<String?> {
+
+    private val gson = Gson()
+
+    fun getToken(): Flow<Token?> {
         return context.datastore.data.map { preferences ->
-            preferences[TOKEN_KEY]
+            val tokenString = preferences[TOKEN_KEY]
+            Log.d("AUTH", tokenString.toString())
+            tokenString?.let { gson.fromJson(it, Token::class.java) }
         }
     }
 
-    suspend fun saveToken(token: String) {
+    suspend fun saveToken(token: Token) {
+        val tokenString = gson.toJson(token)
+        Log.d("TOKEN STRING", tokenString)
         context.datastore.edit { preferences ->
-            preferences[TOKEN_KEY] = token
+            preferences[TOKEN_KEY] = tokenString
         }
     }
 
