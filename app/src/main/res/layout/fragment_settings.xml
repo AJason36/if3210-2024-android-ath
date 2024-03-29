@@ -1,108 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.ath.bondoman.viewmodel.TokenViewModel" />
+    </data>
 
-    <LinearLayout
-        android:layout_width="412dp"
-        android:layout_height="143dp"
-        android:background="@drawable/bg_app_bar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:paddingTop="40dp"
-        android:paddingLeft="30dp"
-        android:outlineProvider="none">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/title_settings"
-            android:textSize="28sp"
-            android:textStyle="bold"/>
-
-    </LinearLayout>
-
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/email_card"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorSecondary"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="100dp"
-        android:layout_marginHorizontal="32dp"
-        app:cardCornerRadius="@dimen/corner_md"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:text="13521044@std.stei.itb.ac.id"
-            android:textSize="@dimen/text_size_md"
-            tools:layout_editor_absoluteX="12dp"
-            tools:layout_editor_absoluteY="167dp" />
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/settings_menu"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorSecondary"
-        app:layout_constraintTop_toBottomOf="@+id/email_card"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="32dp"
-        app:cardCornerRadius="@dimen/corner_md"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <android.widget.Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Button.Ghost"
-                android:text="Option 1"
-                android:textAlignment="viewStart"
-                android:drawableStart="@drawable/ic_settings"
-                android:drawablePadding="6dp"
-                />
-            <android.widget.Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Button.Ghost"
-                android:text="Option 2"
-                android:textAlignment="viewStart"
-                android:drawableStart="@drawable/ic_settings"
-                android:drawablePadding="6dp"
-                />
-            <android.widget.Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Button.Ghost"
-                android:text="Option 3"
-                android:textAlignment="viewStart"
-                android:drawableStart="@drawable/ic_settings"
-                android:drawablePadding="6dp"
-                />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <android.widget.Button
-        android:id="@+id/logout_button"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        style="@style/Button.Error"
-        app:layout_constraintTop_toBottomOf="@id/settings_menu"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="32dp"
-        android:gravity="center"
-        >
+        android:layout_height="match_parent">
 
-    </android.widget.Button>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:layout_width="412dp"
+            android:layout_height="143dp"
+            android:background="@drawable/bg_app_bar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:paddingTop="40dp"
+            android:paddingStart="30dp"
+            android:outlineProvider="none"
+            tools:ignore="RtlSymmetry">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/title_settings"
+                android:textSize="28sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/email_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSecondary"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="100dp"
+            android:layout_marginHorizontal="32dp"
+            app:cardCornerRadius="@dimen/corner_md"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <TextView
+                android:id="@+id/email_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp"
+                android:textSize="@dimen/text_size_md"
+                tools:layout_editor_absoluteX="12dp"
+                tools:layout_editor_absoluteY="167dp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/settings_menu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSecondary"
+            app:layout_constraintTop_toBottomOf="@+id/email_card"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="32dp"
+            app:cardCornerRadius="@dimen/corner_md"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <android.widget.Button
+                    android:id="@+id/send_email_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Button.Ghost"
+                    android:text="Send transactions"
+                    android:textAlignment="viewStart"
+                    android:drawableStart="@drawable/ic_outgoing_mail"
+                    android:drawablePadding="6dp"
+                    />
+                <android.widget.Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Button.Ghost"
+                    android:text="Option 2"
+                    android:textAlignment="viewStart"
+                    android:drawableStart="@drawable/ic_settings"
+                    android:drawablePadding="6dp"
+                    />
+                <android.widget.Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Button.Ghost"
+                    android:text="Option 3"
+                    android:textAlignment="viewStart"
+                    android:drawableStart="@drawable/ic_settings"
+                    android:drawablePadding="6dp"
+                    />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <android.widget.Button
+            android:id="@+id/logout_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            style="@style/Button.Error"
+            app:layout_constraintTop_toBottomOf="@id/settings_menu"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="32dp"
+            android:gravity="center"
+            >
+
+        </android.widget.Button>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
