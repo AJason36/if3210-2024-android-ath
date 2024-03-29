@@ -5,11 +5,13 @@ import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.dao.TransactionDao
 import javax.inject.Inject
 import javax.inject.Singleton
-
+import kotlinx.coroutines.flow.Flow
 
 @Singleton
 class TransactionRepository @Inject constructor(private val transactionDao: TransactionDao) {
-    val allTransactions: LiveData<List<Transaction>> = transactionDao.getAll()
+    fun getAll(): Flow<List<Transaction>> {
+        return transactionDao.getAll()
+    }
 
     suspend fun insert(transaction: Transaction) : Long {
         return transactionDao.insert(transaction)

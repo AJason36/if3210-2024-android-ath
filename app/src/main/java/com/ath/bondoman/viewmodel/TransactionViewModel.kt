@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.dto.TransactionDTO
@@ -22,7 +23,7 @@ class TransactionViewModel @Inject constructor(private val repository: Transacti
     }
     val text: LiveData<String> = _text
 
-    val allTransactions: LiveData<List<Transaction>> = repository.allTransactions
+    val allTransactions: LiveData<List<Transaction>> = repository.getAll().asLiveData(Dispatchers.IO)
 
     private val _insertResult = MutableLiveData<Long>()
     val insertResult: LiveData<Long> = _insertResult

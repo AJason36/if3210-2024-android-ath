@@ -9,7 +9,7 @@ import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.dao.TransactionDao
 
 
-@Database(entities = [Transaction::class], version = 1)
+@Database(entities = [Transaction::class], version = 2)
 @TypeConverters(TransactionCategoryConverter::class, LocationDataTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
