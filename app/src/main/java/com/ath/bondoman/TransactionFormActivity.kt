@@ -32,7 +32,7 @@ class TransactionFormActivity : AppCompatActivity() {
         const val EXTRA_TRANSACTION = "EXTRA_TRANSACTION"
         const val EXTRA_MODE = "EXTRA_MODE"
         const val MODE_ADD = 0
-        const val MODE_UPDATE = 1
+        const val MODE_EDIT = 1
     }
 
     private lateinit var binding: ActivityTransactionFormBinding
@@ -50,11 +50,11 @@ class TransactionFormActivity : AppCompatActivity() {
 
         mode = intent.getIntExtra(EXTRA_MODE, MODE_ADD)
 
-        if (mode == MODE_UPDATE) {
+        if (mode == MODE_EDIT) {
             transaction = intent.getParcelableExtra(EXTRA_TRANSACTION)
 
             // Set title to Update Transaction
-            binding.transactionFormHeaderTitle.text = "Update Transaction"
+            binding.transactionFormHeaderTitle.text = "Edit Transaction"
 
             // Date
             binding.transactionFormDateLabel.text = transaction?.date
@@ -209,7 +209,7 @@ class TransactionFormActivity : AppCompatActivity() {
                 location = currentLocation
             )
             transactionViewModel.insertTransaction(transactionDTO)
-        } else if (mode == MODE_UPDATE && transaction != null) {
+        } else if (mode == MODE_EDIT && transaction != null) {
             val transactionDTO = UpdateTransactionDTO(
                 id = transaction!!.id,
                 title = title,
