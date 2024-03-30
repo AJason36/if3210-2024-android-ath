@@ -131,6 +131,26 @@ class TransactionFormActivity : AppCompatActivity() {
                 .show()
         }
 
+        val openGMapsButton = binding.transactionFormOpenInGmapsButton
+        openGMapsButton.setOnClickListener {
+            Log.d("GMAPS", "Clicked yow")
+            val location = if (mode == MODE_ADD) {
+                currentLocation
+            } else {
+                transaction?.location
+            }
+            location?.let {
+                val gmmIntentUri = Uri.parse("geo:0,0?q=${it.latitude},${it.longitude}")
+                val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+                mapIntent.setPackage("com.google.android.apps.maps")
+                if (mapIntent.resolveActivity(packageManager) != null) {
+                    startActivity(mapIntent)
+                } else {
+                    Toast.makeText(this, "Google Maps is not installed", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
         transactionViewModel.insertResult.observe(this, Observer { rowId ->
             if (rowId != null && rowId != -1L) {
                 Toast.makeText(this, "Transaction inserted successfully!", Toast.LENGTH_SHORT).show()

@@ -24,4 +24,6 @@
     <string name="transaction_form_location_button">Transaction Location Button</string>
     <string name="transaction_form_date_label">Date</string>
     <string name="delete_transaction_button">Delete</string>
+    <string name="transaction_form_open_in_gmaps_button">Open in Google Maps button</string>
+    <string name="transaction_form_open_in_gmaps_text">Open in Google Maps</string>
 </resources>
