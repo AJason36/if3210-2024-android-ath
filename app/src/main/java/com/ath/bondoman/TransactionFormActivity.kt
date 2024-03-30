@@ -100,17 +100,15 @@ class TransactionFormActivity : AppCompatActivity() {
 
         // Observe the location LiveData
         locationViewModel.location.observe(this, Observer { newLocation ->
-            currentLocation = newLocation
-            binding.transactionFormLocationField.text = currentLocation?.address
+            if (newLocation != null && !this.isFinishing) {
+                currentLocation = newLocation
+                binding.transactionFormLocationField.text = currentLocation?.address
+            }
         })
 
         val locationButton = binding.transactionFormLocationButton
         locationButton.setOnClickListener{
-            if (isLocationPermissionGranted(this)) {
-                fetchLocation()
-            } else {
-                showLocationPermissionDialog(this, packageName)
-            }
+            fetchLocation(true)
         }
 
         val saveButton = binding.saveTransactionButton
@@ -169,9 +167,19 @@ class TransactionFormActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchLocation() {
-        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        locationViewModel.fetchLocation(this, fusedLocationClient)
+    private fun fetchLocation(askPermission: Boolean = false) {
+        if (isLocationPermissionGranted(this)) {
+            binding.transactionFormLocationField.text = "Retrieving Location…"
+
+            val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            locationViewModel.fetchLocation(this, fusedLocationClient)
+        } else {
+            binding.transactionFormLocationField.text = "Location is disabled"
+
+            if (askPermission) {
+                showLocationPermissionDialog(this, packageName)
+            }
+        }
     }
 
     private fun saveTransaction() {

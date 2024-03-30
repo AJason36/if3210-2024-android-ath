@@ -20,7 +20,7 @@
     <string name="transaction_form_category_label">Category</string>
     <string name="transaction_form_location_label">Location</string>
     <string name="transaction_form_enable_location_btn">Enable Location</string>
-    <string name="transaction_form_default_location_text">Location is disabled</string>
+    <string name="transaction_form_default_location_text">Retrieving Location…</string>
     <string name="transaction_form_location_button">Transaction Location Button</string>
     <string name="transaction_form_date_label">Date</string>
     <string name="delete_transaction_button">Delete</string>
