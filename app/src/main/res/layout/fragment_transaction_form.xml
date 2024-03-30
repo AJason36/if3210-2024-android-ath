@@ -36,10 +36,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="631dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="28dp"
         app:layout_constraintTop_toBottomOf="@+id/headerLinearLayout"
+        app:layout_constraintVertical_bias="1.0"
         tools:layout_editor_absoluteX="0dp">
 
         <!-- Date -->
@@ -47,78 +48,77 @@
             android:id="@+id/transaction_form_date_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="8dp"
             android:layout_marginBottom="10dp"
-            android:textSize="@dimen/text_size_sm"
             android:autofillHints="transactionDate"
-            android:gravity="end" />
+            android:drawablePadding="8dp"
+            android:gravity="end"
+            android:textSize="@dimen/text_size_sm" />
 
         <!-- Title -->
         <TextView
             android:id="@+id/transaction_form_title_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:labelFor="@+id/transaction_form_title_field"
             android:text="@string/transaction_form_title_label"
             android:textSize="@dimen/text_size_sm"
-            android:textStyle="bold"
-            android:labelFor="@+id/transaction_form_title_field" />
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/transaction_form_title_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="8dp"
             android:layout_marginBottom="10dp"
+            android:autofillHints="transactionTitle"
+            android:drawablePadding="8dp"
             android:inputType="text"
-            android:textSize="@dimen/text_size_sm"
-            android:autofillHints="transactionTitle" />
+            android:textSize="@dimen/text_size_sm" />
 
         <!-- Amount -->
         <TextView
             android:id="@+id/transaction_form_amount_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:labelFor="@+id/transaction_form_amount_field"
             android:text="@string/transaction_form_amount_label"
             android:textSize="@dimen/text_size_sm"
-            android:textStyle="bold"
-            android:labelFor="@+id/transaction_form_amount_field" />
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/transaction_form_amount_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawablePadding="8dp"
             android:layout_marginBottom="10dp"
+            android:autofillHints="transactionAmount"
+            android:drawablePadding="8dp"
             android:inputType="numberDecimal"
-            android:textSize="@dimen/text_size_sm"
-            android:autofillHints="transactionAmount" />
+            android:textSize="@dimen/text_size_sm" />
 
         <!-- Category -->
         <TextView
             android:id="@+id/transaction_form_category_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:labelFor="@+id/transaction_form_category_field"
             android:text="@string/transaction_form_category_label"
             android:textSize="@dimen/text_size_sm"
-            android:textStyle="bold"
-            android:labelFor="@+id/transaction_form_category_field" />
+            android:textStyle="bold" />
 
         <Spinner
             android:id="@+id/transaction_form_category_field"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-        />
+            android:layout_marginBottom="10dp" />
 
         <!-- Location -->
         <TextView
             android:id="@+id/transaction_form_location_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:labelFor="@+id/location_field"
             android:text="@string/transaction_form_location_label"
             android:textSize="@dimen/text_size_sm"
-            android:textStyle="bold"
-            android:labelFor="@+id/location_field" />
+            android:textStyle="bold" />
 
         <RelativeLayout
             android:id="@+id/locationLinearLayout"
@@ -132,8 +132,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/ic_location"
-                android:contentDescription="@string/transaction_form_location_button" />
+                android:contentDescription="@string/transaction_form_location_button"
+                android:src="@drawable/ic_location" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -145,40 +145,38 @@
                     android:id="@+id/transaction_form_location_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_sm"
-                    android:text="@string/transaction_form_default_location_text"
+                    android:ellipsize="end"
                     android:maxLines="3"
-                    android:ellipsize="end" />
+                    android:text="@string/transaction_form_default_location_text"
+                    android:textSize="@dimen/text_size_sm" />
 
                 <!-- Open in Gmaps -->
                 <LinearLayout
                     android:id="@+id/transaction_form_open_in_gmaps_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="6dp"
                     android:gravity="center_vertical"
-                    >
+                    android:orientation="horizontal">
 
                     <ImageButton
                         android:id="@+id/transaction_form_open_in_gmaps_button_image"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:src="@drawable/ic_open_in"
                         android:background="@android:color/transparent"
-                        android:contentDescription="@string/transaction_form_open_in_gmaps_button"/>
+                        android:contentDescription="@string/transaction_form_open_in_gmaps_button"
+                        android:src="@drawable/ic_open_in" />
 
                     <TextView
                         android:id="@+id/transaction_form_open_in_gmaps_button_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/transaction_form_open_in_gmaps_text"
                         android:layout_gravity="center_vertical"
-                        android:textSize="@dimen/text_size_sm"
-                        android:textStyle="italic"
                         android:layout_marginStart="4dp"
+                        android:text="@string/transaction_form_open_in_gmaps_text"
                         android:textColor="@color/blue_500"
-                        />
+                        android:textSize="@dimen/text_size_sm"
+                        android:textStyle="italic" />
 
                 </LinearLayout>
 
@@ -192,21 +190,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
 
             <!-- Delete Button -->
             <android.widget.Button
-                style="@style/Button.Error"
                 android:id="@+id/delete_transaction_button"
+                style="@style/Button.Error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/delete_transaction_button" />
 
             <!-- Save Button -->
             <android.widget.Button
-                style="@style/Button.Primary"
                 android:id="@+id/save_transaction_button"
+                style="@style/Button.Primary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"

@@ -1,11 +1,12 @@
 package com.ath.bondoman.ui.transaction
 
-import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.ath.bondoman.TransactionFormActivity
+import com.ath.bondoman.R
 import com.ath.bondoman.databinding.TransactionListItemBinding
 import com.ath.bondoman.model.Transaction
 
@@ -36,12 +37,11 @@ class TransactionListAdapter : RecyclerView.Adapter<TransactionListAdapter.Trans
         holder.location.text = transaction.location?.address
 
         holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, TransactionFormActivity::class.java).apply {
-                putExtra(TransactionFormActivity.EXTRA_TRANSACTION, transaction)
-                putExtra(TransactionFormActivity.EXTRA_MODE, TransactionFormActivity.MODE_EDIT)
+            val bundle = Bundle().apply {
+                putParcelable(TransactionFormFragment.EXTRA_TRANSACTION, transaction)
+                putInt(TransactionFormFragment.EXTRA_MODE, TransactionFormFragment.MODE_EDIT)
             }
-            context.startActivity(intent)
+            it.findNavController().navigate(R.id.action_transactionFragment_to_transactionFormFragment, bundle)
         }
     }
 

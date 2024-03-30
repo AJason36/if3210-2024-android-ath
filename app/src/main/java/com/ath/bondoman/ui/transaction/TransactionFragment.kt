@@ -1,6 +1,5 @@
 package com.ath.bondoman.ui.transaction
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,9 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ath.bondoman.TransactionFormActivity
+import com.ath.bondoman.R
 import com.ath.bondoman.databinding.FragmentTransactionBinding
 import com.ath.bondoman.viewmodel.TransactionViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,8 +35,7 @@ class TransactionFragment : Fragment() {
         // Add Transaction Button
         val addTransactionBtn = binding.addTransactionBtn
         addTransactionBtn.setOnClickListener {
-            val intent = Intent(context, TransactionFormActivity::class.java)
-            startActivity(intent)
+            it.findNavController().navigate(R.id.action_transactionFragment_to_transactionFormFragment)
         }
 
         val adapter = TransactionListAdapter()

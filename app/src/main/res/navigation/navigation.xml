@@ -9,7 +9,17 @@
         android:id="@+id/navigation_transaction"
         android:name="com.ath.bondoman.ui.transaction.TransactionFragment"
         android:label="@string/title_transaction"
-        tools:layout="@layout/fragment_transaction" />
+        tools:layout="@layout/fragment_transaction">
+        <action
+            android:id="@+id/action_transactionFragment_to_transactionFormFragment"
+            app:destination="@id/transactionFormFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/transactionFormFragment"
+        android:name="com.ath.bondoman.ui.transaction.TransactionFormFragment"
+        android:label="@string/title_transaction_form"
+        tools:layout="@layout/fragment_transaction_form" />
 
     <fragment
         android:id="@+id/navigation_scan"
