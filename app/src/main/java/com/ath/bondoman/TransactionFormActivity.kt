@@ -2,6 +2,7 @@ package com.ath.bondoman
 
 import android.R
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -50,6 +51,9 @@ class TransactionFormActivity : AppCompatActivity() {
 
         if (mode == MODE_UPDATE) {
             transaction = intent.getParcelableExtra(EXTRA_TRANSACTION)
+
+            // Set title to Update Transaction
+            binding.transactionFormHeaderTitle.text = "Update Transaction"
 
             // Date
             binding.transactionFormDateLabel.text = transaction?.date
@@ -116,7 +120,7 @@ class TransactionFormActivity : AppCompatActivity() {
         transactionViewModel.insertResult.observe(this, Observer { rowId ->
             if (rowId != null) {
                 Toast.makeText(this, "Transaction inserted successfully!", Toast.LENGTH_SHORT).show()
-                finish()
+                goToTransactionList()
             } else {
                 Toast.makeText(this, "Failed to insert transaction. Please try again!", Toast.LENGTH_SHORT).show()
             }
@@ -125,7 +129,7 @@ class TransactionFormActivity : AppCompatActivity() {
         transactionViewModel.updateResult.observe(this, Observer { rowId ->
             if (rowId != null) {
                 Toast.makeText(this, "Transaction updated successfully!", Toast.LENGTH_SHORT).show()
-                finish()
+                goToTransactionList()
             } else {
                 Toast.makeText(this, "Failed to update transaction. Please try again!", Toast.LENGTH_SHORT).show()
             }
@@ -183,5 +187,11 @@ class TransactionFormActivity : AppCompatActivity() {
             )
             transactionViewModel.updateTransaction(transactionDTO)
         }
+    }
+
+    private fun goToTransactionList() {
+        finish()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 }
