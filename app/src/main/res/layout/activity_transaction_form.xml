@@ -148,15 +148,30 @@
                 android:ellipsize="end" />
         </RelativeLayout>
 
-        <!-- Save Button -->
-        <Button
-            android:id="@+id/save_transaction_button"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/bg_primary_button"
-            android:text="@string/save_transaction_button"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp">
+
+            <!-- Delete Button -->
+            <android.widget.Button
+                style="@style/Button.Error"
+                android:id="@+id/delete_transaction_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_transaction_button" />
+
+            <!-- Save Button -->
+            <android.widget.Button
+                style="@style/Button.Primary"
+                android:id="@+id/save_transaction_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/save_transaction_button" />
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,6 +28,8 @@ class TransactionViewModel @Inject constructor(private val repository: Transacti
     val insertResult: LiveData<Long> = _insertResult
     private val _updateResult = MutableLiveData<Int>()
     val updateResult: LiveData<Int> = _updateResult
+    private val _deleteResult = MutableLiveData<Int>()
+    val deleteResult: LiveData<Int> = _deleteResult
 
     fun insertTransaction(transactionDTO: InsertTransactionDTO) {
         viewModelScope.launch {
@@ -37,10 +39,14 @@ class TransactionViewModel @Inject constructor(private val repository: Transacti
                 amount = transactionDTO.amount,
                 location = transactionDTO.location
             )
-            val rowId = withContext(Dispatchers.IO) {
-                repository.insert(transaction)
+            try {
+                val rowId = withContext(Dispatchers.IO) {
+                    repository.insert(transaction)
+                }
+                _insertResult.value = rowId
+            } catch (e: Exception) {
+                _insertResult.value = -1L
             }
-            _insertResult.value = rowId
 
         }
     }
@@ -59,6 +65,15 @@ class TransactionViewModel @Inject constructor(private val repository: Transacti
                 repository.update(transaction)
             }
             _updateResult.value = rowId
+        }
+    }
+
+    fun deleteTransaction(transaction: Transaction) {
+        viewModelScope.launch {
+            val rowId = withContext(Dispatchers.IO) {
+                repository.delete(transaction)
+            }
+            _deleteResult.value = rowId
         }
     }
 }

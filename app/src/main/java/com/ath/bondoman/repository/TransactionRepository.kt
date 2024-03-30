@@ -21,7 +21,7 @@ class TransactionRepository @Inject constructor(private val transactionDao: Tran
         return transactionDao.update(transaction)
     }
 
-    suspend fun delete(transaction: Transaction) {
-        transactionDao.delete(transaction)
+    suspend fun delete(transaction: Transaction) : Int {
+        return transactionDao.delete(transaction)
     }
 }

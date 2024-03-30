@@ -21,5 +21,5 @@ interface TransactionDao {
     suspend fun update(transaction: Transaction) : Int
 
     @Delete
-    suspend fun delete(transaction: Transaction)
+    suspend fun delete(transaction: Transaction) : Int
 }

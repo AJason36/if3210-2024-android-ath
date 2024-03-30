@@ -16,6 +16,7 @@ import com.google.android.gms.location.LocationServices
 import android.widget.Toast
 import com.ath.bondoman.viewmodel.TransactionViewModel
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import com.ath.bondoman.model.LocationData
 import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.dto.InsertTransactionDTO
@@ -70,10 +71,15 @@ class TransactionFormActivity : AppCompatActivity() {
             binding.transactionFormCategoryField.isEnabled = false
 
             // Location
-            binding.transactionFormLocationField.text = transaction?.location?.address
+            binding.transactionFormLocationField.text = transaction?.location?.address ?: "No location specified"
         } else {
             // Hide date
             binding.transactionFormDateLabel.visibility = View.GONE
+
+            // Hide delete button
+            binding.deleteTransactionButton.visibility = View.GONE
+
+            fetchLocation()
         }
 
         val backBtn = binding.transactionFormBackBtn
@@ -98,8 +104,6 @@ class TransactionFormActivity : AppCompatActivity() {
             binding.transactionFormLocationField.text = currentLocation?.address
         })
 
-        fetchLocation()
-
         val locationButton = binding.transactionFormLocationButton
         locationButton.setOnClickListener{
             if (isLocationPermissionGranted(this)) {
@@ -117,8 +121,20 @@ class TransactionFormActivity : AppCompatActivity() {
             saveTransaction()
         }
 
+        val deleteButton = binding.deleteTransactionButton
+        deleteButton.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Delete Transaction")
+                .setMessage("Are you sure you want to delete this transaction?")
+                .setPositiveButton("Yes") { dialog, which ->
+                    deleteTransaction()
+                }
+                .setNegativeButton("No", null)
+                .show()
+        }
+
         transactionViewModel.insertResult.observe(this, Observer { rowId ->
-            if (rowId != null) {
+            if (rowId != null && rowId != -1L) {
                 Toast.makeText(this, "Transaction inserted successfully!", Toast.LENGTH_SHORT).show()
                 goToTransactionList()
             } else {
@@ -127,11 +143,20 @@ class TransactionFormActivity : AppCompatActivity() {
         })
 
         transactionViewModel.updateResult.observe(this, Observer { rowId ->
-            if (rowId != null) {
+            if (rowId != null && rowId != 0) {
                 Toast.makeText(this, "Transaction updated successfully!", Toast.LENGTH_SHORT).show()
                 goToTransactionList()
             } else {
                 Toast.makeText(this, "Failed to update transaction. Please try again!", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        transactionViewModel.deleteResult.observe(this, Observer { rowId ->
+            if (rowId != null && rowId != 0) {
+                Toast.makeText(this, "Transaction deleted successfully!", Toast.LENGTH_SHORT).show()
+                goToTransactionList()
+            } else {
+                Toast.makeText(this, "Failed to delete transaction. Please try again!", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -189,8 +214,14 @@ class TransactionFormActivity : AppCompatActivity() {
         }
     }
 
+    private fun deleteTransaction() {
+        val localTransaction = transaction
+        if (localTransaction != null) {
+            transactionViewModel.deleteTransaction(localTransaction)
+        }
+    }
+
     private fun goToTransactionList() {
-        finish()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
