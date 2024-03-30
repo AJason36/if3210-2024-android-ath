@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -33,6 +34,7 @@ class TransactionFormActivity : AppCompatActivity() {
         const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
         const val EXTRA_TRANSACTION = "EXTRA_TRANSACTION"
         const val EXTRA_MODE = "EXTRA_MODE"
+        const val EXTRA_RANDOM_AMOUNT = "EXTRA_RANDOM_AMOUNT"
         const val MODE_ADD = 0
         const val MODE_EDIT = 1
     }
@@ -80,6 +82,12 @@ class TransactionFormActivity : AppCompatActivity() {
 
             // Hide delete button
             binding.deleteTransactionButton.visibility = View.GONE
+
+            // Check if Activity started by Broadcast Receiver
+            if (intent.hasExtra(EXTRA_RANDOM_AMOUNT)) {
+                val randomAmount = intent.getLongExtra(EXTRA_RANDOM_AMOUNT, 0)
+                binding.transactionFormAmountField.setText(randomAmount.toString())
+            }
 
             fetchLocation()
         }

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.ath.bondoman.TransactionFormBroadcastReceiver
 import com.ath.bondoman.VerifyJwtService
 import com.ath.bondoman.databinding.FragmentSettingsBinding
 import com.ath.bondoman.model.Transaction
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
+import kotlin.random.Random
 
 
 @AndroidEntryPoint
@@ -62,6 +64,12 @@ class SettingsFragment : Fragment() {
                 }
             }
         }
+
+        val randomizeTransactionButton = binding.randomizeTransactionButton
+        randomizeTransactionButton.setOnClickListener {
+            randomizeTransaction()
+        }
+
         return root
     }
 
@@ -75,6 +83,19 @@ class SettingsFragment : Fragment() {
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Transaction List")
         emailIntent.putExtra(Intent.EXTRA_TEXT, "Transaction list from BondoMan is attached to this email")
         startActivity(Intent.createChooser(emailIntent, "Send email..."))
+    }
+
+    private fun randomizeTransaction() {
+        val MIN_RANDOM_VALUE = 100_000L
+        val MAX_RANDOM_VALUE = 10_000_000L
+        val randomAmount = Random.nextLong(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE)
+
+        val intent = Intent(context, TransactionFormBroadcastReceiver::class.java).apply {
+            action = TransactionFormBroadcastReceiver.TRANSACTION_FORM_BROADCAST_RECEIVER
+            putExtra(TransactionFormBroadcastReceiver.RECEIVE_RANDOM_AMOUNT, randomAmount)
+        }
+
+        context?.sendBroadcast(intent)
     }
 
     override fun onDestroyView() {
