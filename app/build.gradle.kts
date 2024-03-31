@@ -92,4 +92,6 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
 
     implementation ("com.github.AnyChart:AnyChart-Android:1.1.5")
+    implementation ("androidx.security:security-crypto:1.1.0-alpha06")
+
 }
