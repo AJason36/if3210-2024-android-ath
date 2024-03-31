@@ -56,8 +56,6 @@ class LoginActivity : AppCompatActivity() {
             val email = emailEt.text.toString()
             val password = passwordEt.text.toString()
             val payload = LoginPayload(email, password)
-            Log.d("DEBUG", email)
-            Log.d("DEBUG", password)
 
             if (email.isEmpty()) {
                 emailErrorTextView.visibility = View.VISIBLE
@@ -81,10 +79,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         authViewModel.loginResponse.observe(this) { response ->
-            Log.d("DEBUG", response.toString())
             when (response) {
                 is ApiResponse.Failure -> {
-                    Log.d("DEBUG", "naurrrr")
                     val errorMessage = when {
                         response.code == 400 || response.code == 401 -> "Invalid username or password"
                         response.message.contains("Unable to resolve host") -> "Device not connected to the internet"
@@ -95,7 +91,6 @@ class LoginActivity : AppCompatActivity() {
                 }
 
                 is ApiResponse.Success -> {
-                    Log.d("DEBUG", "masuk sini")
                     loginErrorText.visibility = View.GONE
                     val token = Token(response.data.token, binding.emailEditText.text.toString())
                     tokenViewModel.saveToken(token)
