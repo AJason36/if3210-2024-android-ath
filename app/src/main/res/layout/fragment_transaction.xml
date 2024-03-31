@@ -22,7 +22,8 @@
             android:layout_weight="1"
             android:text="@string/title_transaction"
             android:textSize="28sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
 
         <ImageButton
             android:id="@+id/addTransactionBtn"
