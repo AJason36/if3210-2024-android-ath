@@ -51,31 +51,7 @@ class ScanFragment : Fragment() {
         _binding = FragmentScanBinding.inflate(layoutInflater)
 
     }
-    private val activityResultLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions())
-        { permissions ->
-            // Handle Permission granted/rejected
-            var permissionGranted = true
-            permissions.entries.forEach {
-                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
-                    permissionGranted = false
-            }
-            if (!permissionGranted) {
-                Toast.makeText(requireContext(),
-                    "Permission request denied",
-                    Toast.LENGTH_SHORT).show()
-            } else {
-                startCamera()
-            }
-        }
-
-    // To open the gallery
-    private fun pickImageFromGallery() {
-        pickImageLauncher.launch("image/*")
-
-    }
-
+    
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
 
@@ -160,6 +136,30 @@ class ScanFragment : Fragment() {
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             requireContext(), it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions())
+        { permissions ->
+            // Handle Permission granted/rejected
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                Toast.makeText(requireContext(),
+                    "Permission request denied",
+                    Toast.LENGTH_SHORT).show()
+            } else {
+                startCamera()
+            }
+        }
+
+    // To open the gallery
+    private fun pickImageFromGallery() {
+        pickImageLauncher.launch("image/*")
     }
     override fun onCreateView(
             inflater: LayoutInflater,
