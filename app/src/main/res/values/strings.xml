@@ -26,4 +26,5 @@
     <string name="delete_transaction_button">Delete</string>
     <string name="transaction_form_open_in_gmaps_button">Open in Google Maps button</string>
     <string name="transaction_form_open_in_gmaps_text">Open in Google Maps</string>
+    <string name="no_transaction">There is no transaction</string>
 </resources>

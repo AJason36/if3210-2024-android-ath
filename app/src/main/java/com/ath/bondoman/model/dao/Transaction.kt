@@ -1,6 +1,5 @@
 package com.ath.bondoman.model.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -14,6 +13,11 @@ interface TransactionDao {
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     fun getAll(): Flow<List<Transaction>>
 
+    @Query("SELECT SUM(amount) FROM transactions WHERE category = 'Income'")
+    fun getAllIncome():Flow<Double>
+
+    @Query("SELECT SUM(amount) FROM transactions WHERE category = 'Expenditure'")
+    fun getAllExpenditure():Flow<Double>
     @Insert
     suspend fun insert(transaction: Transaction) : Long
 
