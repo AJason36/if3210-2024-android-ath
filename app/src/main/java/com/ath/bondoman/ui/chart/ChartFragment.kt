@@ -75,12 +75,12 @@ class ChartFragment : Fragment() {
             data[1] = ValueDataEntry("Expenditure",expenditure)
             updateChartFragment(data,anyChartView,textView,pie)
         }
-        updateChartFragment(data,anyChartView,textView,pie)
+        anyChartView.setChart(pie)
         return root
     }
 
     fun updateChartFragment(data:MutableList<DataEntry>, anyChartView:AnyChartView,textView:TextView, pie: Pie) {
-        if (data.isEmpty()) {
+        if (data.isEmpty() || isChartDataZero(data)) {
             // Pie chart is empty, update the TextView
             anyChartView.visibility = View.GONE
             textView.visibility = View.VISIBLE
@@ -89,23 +89,26 @@ class ChartFragment : Fragment() {
             textView.visibility = View.GONE
             anyChartView.visibility = View.VISIBLE
             pie.data(data)
-            anyChartView.setChart(pie)
         }
     }
 
     // TODO: check zero in valuedataentry
     fun isChartDataZero(data:MutableList<DataEntry>): Boolean {
-        return if (data.size>1) {
+        if (data.size>1) {
             val incomeEntry = data[0]
             val expenditureEntry = data[1]
-            // Check if both entries exist and have non-null values for "Income" and "Expenditure"
-            val isIncomeZero = incomeEntry.getValue("Income")?.equals(0) ?: true
-            val isExpenditureZero = expenditureEntry.getValue("Expenditure")?.equals(0) ?: true
-    //            Log.d("IsIncomeZero",data[0].getValue("Income").toString())
-    //            Log.d("IsExpenditureZero",data[1].getValue("Expenditure").toString())
-            isIncomeZero && isExpenditureZero
+            var isIncomeZero=false
+            var isExpenditureZero = false
+
+            isIncomeZero = incomeEntry.getValue("value").equals(0.0)
+            isExpenditureZero=expenditureEntry.getValue("value").equals(0.0)
+
+
+            Log.d("IsIncomeZero",incomeEntry.getValue("value").toString())
+            Log.d("IsExpenditureZero",incomeEntry.getValue("value").toString())
+            return isIncomeZero && isExpenditureZero
         }else{
-            true;
+            return true;
         }
     }
     override fun onDestroyView() {
