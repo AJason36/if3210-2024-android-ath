@@ -90,4 +90,6 @@ dependencies {
     val coroutineVersion = "1.7.3"
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
+
+    implementation ("com.github.AnyChart:AnyChart-Android:1.1.5")
 }
