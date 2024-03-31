@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -13,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -89,7 +91,7 @@ class SettingsFragment : Fragment() {
 
         val xlsExportButton = binding.xlsExportButton
         val xlsxExportButton = binding.xlsxExportButton
-        var filePath:String
+        var filePath:Uri
         xlsExportButton.setOnClickListener{
             if (allPermissionsGranted()) {
                 Toast.makeText(requireContext(), "Exporting transactions...", Toast.LENGTH_SHORT).show()
@@ -108,8 +110,8 @@ class SettingsFragment : Fragment() {
                 Toast.makeText(requireContext(), "Exporting transactions...", Toast.LENGTH_SHORT).show()
                 lifecycleScope.launch {
                     transactionRepository.getAll().collect { transactions ->
-                        filePath = exportTransactionsToExcel(transactions, "xlsx", requireContext())
-                        Log.d("File Export", filePath)
+                        filePath=exportTransactionsToExcel(transactions, "xlsx", requireContext())
+                        Log.d("File Export", filePath.toString())
                     }
                 }
             }else{
@@ -121,14 +123,19 @@ class SettingsFragment : Fragment() {
     }
 
     private fun sendEmail(transactions: List<Transaction>) {
-//        ExcelUtil.writeToExcel(transactions, getFilesDir() + "/" + FILE_PATH)
-//        val file: File = File(getFilesDir(), FILE_PATH)
-//        val uri = Uri.fromFile(file)
+        val uri:Uri = exportTransactionsToExcel(transactions,"xlsx",requireContext())
+//        val file: File = File(filePath)
+//        val uri: Uri = FileProvider.getUriForFile(
+//            requireContext(),
+//            "${requireContext().applicationContext.packageName}.provider",
+//            file
+//        )
         val emailIntent = Intent(Intent.ACTION_SEND)
-        emailIntent.setType("vnd.android.cursor.dir/email")
+        emailIntent.setType("application/vnd.ms-excel")
         emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(tokenViewModel.token.value?.email))
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Transaction List")
         emailIntent.putExtra(Intent.EXTRA_TEXT, "Transaction list from BondoMan is attached to this email")
+        emailIntent.putExtra(Intent.EXTRA_STREAM, uri)
         startActivity(Intent.createChooser(emailIntent, "Send email..."))
     }
 
@@ -168,15 +175,15 @@ class SettingsFragment : Fragment() {
         ContextCompat.checkSelfPermission(
             requireContext(), it) == PackageManager.PERMISSION_GRANTED
     }
-    private fun exportTransactionsToExcel(transactions: List<Transaction>, fileType: String, context: Context): String {
-        try {
-            val strDate: String =
-                SimpleDateFormat("dd-MM-yyyy HH-mm-ss", Locale.getDefault()).format(Date())
-            val root = File(
-                Environment
-                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), ""
-            )
+    private fun exportTransactionsToExcel(transactions: List<Transaction>, fileType: String, context: Context): Uri {
 
+        val strDate: String =
+            SimpleDateFormat("dd-MM-yyyy HH-mm-ss", Locale.getDefault()).format(Date())
+        val root = File(
+            Environment
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), ""
+        )
+        try {
             if (!root.exists()) root.mkdirs()
 
             val workbook: Workbook = if (fileType == "xlsx") {
@@ -263,10 +270,18 @@ class SettingsFragment : Fragment() {
             workbook.close()
             Toast.makeText(requireContext(), "Data successfully saved!", Toast.LENGTH_SHORT).show();
 
-            return path.absolutePath
+            return FileProvider.getUriForFile(
+                    context,
+                "${requireContext().applicationContext.packageName}.provider",
+                path
+            )
         } catch (e: IOException) {
             e.printStackTrace()
-            return ""
+            return FileProvider.getUriForFile(
+                context,
+                "${requireContext().applicationContext.packageName}.provider",
+                root
+            )
         }
     }
 
