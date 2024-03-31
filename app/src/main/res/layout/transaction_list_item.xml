@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="@dimen/text_size_sm"
-                android:text="Date" />
+                android:text="@string/date_label" />
 
             <TextView
                 android:id="@+id/category"
@@ -35,7 +35,7 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:textSize="@dimen/text_size_sm"
-                android:text="Category" />
+                android:text="@string/category_label" />
         </LinearLayout>
 
         <TextView
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="@dimen/text_size_sm"
-                android:text="Amount" />
+                android:text="@string/amount_label" />
 
             <TextView
                 android:id="@+id/location"
@@ -67,7 +67,7 @@
                 android:singleLine="true"
                 android:ellipsize="end"
                 android:textSize="@dimen/text_size_sm"
-                android:text="Location" />
+                android:text="@string/location_label" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,4 +27,20 @@
     <string name="transaction_form_open_in_gmaps_button">Open in Google Maps button</string>
     <string name="transaction_form_open_in_gmaps_text">Open in Google Maps</string>
     <string name="no_transaction">There is no transaction</string>
+    <string name="send_transactions_option">Send transactions</string>
+    <string name="randomize_transaction_option">Randomize Transaction</string>
+    <string name="logout_btn_text">Logout</string>
+    <string name="date_label">Date</string>
+    <string name="category_label">Category</string>
+    <string name="amount_label">Amount</string>
+    <string name="location_label">Location</string>
+    <string name="login_subtitle_text">Please login to your account to start using BondoMan</string>
+    <string name="email_label">Email</string>
+    <string name="email_placeholder">Enter your email</string>
+    <string name="email_error_text">Email is required</string>
+    <string name="password_label">Password</string>
+    <string name="password_placeholder">Enter your password</string>
+    <string name="password_error_text">Password is required</string>
+    <string name="login_btn_text">LOGIN</string>
+    <string name="welcome_back_title">Welcome Back</string>
 </resources>

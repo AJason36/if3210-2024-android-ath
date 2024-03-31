@@ -74,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/Button.Ghost"
-                    android:text="Send transactions"
+                    android:text="@string/send_transactions_option"
                     android:textAlignment="viewStart"
                     android:drawableStart="@drawable/ic_outgoing_mail"
                     android:drawablePadding="6dp"
@@ -87,18 +87,8 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/ic_random"
                     android:drawablePadding="6dp"
-                    android:text="Randomize Transaction"
+                    android:text="@string/randomize_transaction_option"
                     android:textAlignment="viewStart" />
-
-                <android.widget.Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/Button.Ghost"
-                    android:text="Option 3"
-                    android:textAlignment="viewStart"
-                    android:drawableStart="@drawable/ic_settings"
-                    android:drawablePadding="6dp"
-                    />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -106,7 +96,7 @@
             android:id="@+id/logout_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Logout"
+            android:text="@string/logout_btn_text"
             style="@style/Button.Error"
             app:layout_constraintTop_toBottomOf="@id/settings_menu"
             android:layout_marginTop="20dp"
