@@ -43,7 +43,10 @@ class ChartFragment : Fragment() {
             textView.text = it
         }
 
-        val data: MutableList<DataEntry> = ArrayList()
+        val data: MutableList<DataEntry> = mutableListOf(
+            ValueDataEntry("Income", 0.0),
+            ValueDataEntry("Expenditure", 0.0)
+        )
         val pie = AnyChart.pie()
 
         pie.labels().position("outside")
@@ -61,18 +64,18 @@ class ChartFragment : Fragment() {
         val anyChartView: AnyChartView=binding.anyChartView
         chartViewModel.allIncome.observe(viewLifecycleOwner) { income ->
             Log.d("Income", income.toString())
-            // Update the existing "Income" entry
-            data.add(ValueDataEntry("Income",income))
+            // Update Income entry
+            data[0] = ValueDataEntry("Income", income)
             // Refresh the chart
-            pie.data(data)
+            updateChartFragment(data,anyChartView,textView,pie)
         }
         chartViewModel.allExpenditure.observe(viewLifecycleOwner) { expenditure ->
             Log.d("Expenditure", expenditure.toString())
-            data.add(ValueDataEntry("Expenditure",expenditure))
-            pie.data(data)
+            // Update Expenditure entry
+            data[1] = ValueDataEntry("Expenditure",expenditure)
+            updateChartFragment(data,anyChartView,textView,pie)
         }
-
-        anyChartView.setChart(pie)
+        updateChartFragment(data,anyChartView,textView,pie)
         return root
     }
 
@@ -85,7 +88,24 @@ class ChartFragment : Fragment() {
             // Pie chart has data, update the AnyChartView
             textView.visibility = View.GONE
             anyChartView.visibility = View.VISIBLE
+            pie.data(data)
             anyChartView.setChart(pie)
+        }
+    }
+
+    // TODO: check zero in valuedataentry
+    fun isChartDataZero(data:MutableList<DataEntry>): Boolean {
+        return if (data.size>1) {
+            val incomeEntry = data[0]
+            val expenditureEntry = data[1]
+            // Check if both entries exist and have non-null values for "Income" and "Expenditure"
+            val isIncomeZero = incomeEntry.getValue("Income")?.equals(0) ?: true
+            val isExpenditureZero = expenditureEntry.getValue("Expenditure")?.equals(0) ?: true
+    //            Log.d("IsIncomeZero",data[0].getValue("Income").toString())
+    //            Log.d("IsExpenditureZero",data[1].getValue("Expenditure").toString())
+            isIncomeZero && isExpenditureZero
+        }else{
+            true;
         }
     }
     override fun onDestroyView() {
