@@ -1,21 +1,43 @@
 package com.ath.bondoman.ui.settings
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.ath.bondoman.receiver.TransactionFormBroadcastReceiver
 import com.ath.bondoman.VerifyJwtService
 import com.ath.bondoman.databinding.FragmentSettingsBinding
 import com.ath.bondoman.model.Transaction
+import com.ath.bondoman.receiver.TransactionFormBroadcastReceiver
 import com.ath.bondoman.repository.TransactionRepository
 import com.ath.bondoman.viewmodel.TokenViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.apache.poi.hssf.usermodel.HSSFWorkbook
+import org.apache.poi.ss.usermodel.BorderStyle
+import org.apache.poi.ss.usermodel.FillPatternType
+import org.apache.poi.ss.usermodel.Font
+import org.apache.poi.ss.usermodel.HorizontalAlignment
+import org.apache.poi.ss.usermodel.IndexedColors
+import org.apache.poi.ss.usermodel.Workbook
+import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -65,6 +87,36 @@ class SettingsFragment : Fragment() {
             randomizeTransaction()
         }
 
+        val xlsExportButton = binding.xlsExportButton
+        val xlsxExportButton = binding.xlsxExportButton
+        var filePath:String
+        xlsExportButton.setOnClickListener{
+            if (allPermissionsGranted()) {
+                Toast.makeText(requireContext(), "Exporting transactions...", Toast.LENGTH_SHORT).show()
+                lifecycleScope.launch {
+                    transactionRepository.getAll().collect{
+                        transactions -> exportTransactionsToExcel(transactions,"xls",requireContext())
+                    }
+                }
+            }else{
+                requestPermissions()
+            }
+        }
+
+        xlsxExportButton.setOnClickListener{
+            if(allPermissionsGranted()) {
+                Toast.makeText(requireContext(), "Exporting transactions...", Toast.LENGTH_SHORT).show()
+                lifecycleScope.launch {
+                    transactionRepository.getAll().collect { transactions ->
+                        filePath = exportTransactionsToExcel(transactions, "xlsx", requireContext())
+                        Log.d("File Export", filePath)
+                    }
+                }
+            }else{
+                requestPermissions()
+            }
+        }
+
         return root
     }
 
@@ -92,7 +144,142 @@ class SettingsFragment : Fragment() {
 
         context?.sendBroadcast(intent)
     }
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions())
+        { permissions ->
+            // Handle Permission granted/rejected
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in SettingsFragment.REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                Toast.makeText(requireContext(),
+                    "Permission request denied",
+                    Toast.LENGTH_SHORT).show()
+            }
+        }
+    private fun requestPermissions() {
+        activityResultLauncher.launch(SettingsFragment.REQUIRED_PERMISSIONS)
+    }
 
+    private fun allPermissionsGranted() = SettingsFragment.REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            requireContext(), it) == PackageManager.PERMISSION_GRANTED
+    }
+    private fun exportTransactionsToExcel(transactions: List<Transaction>, fileType: String, context: Context): String {
+        try {
+            val strDate: String =
+                SimpleDateFormat("dd-MM-yyyy HH-mm-ss", Locale.getDefault()).format(Date())
+            val root = File(
+                Environment
+                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), ""
+            )
+
+            if (!root.exists()) root.mkdirs()
+
+            val workbook: Workbook = if (fileType == "xlsx") {
+                XSSFWorkbook() // For .xlsx files
+            } else {
+                HSSFWorkbook() // For .xls files
+            }
+            val path:File = if(fileType=="xlsx"){
+                File(root, "/Transaction-$strDate.xlsx")
+            }else{
+                File(root, "/Transaction-$strDate.xls")
+            }
+            val outputStream = FileOutputStream(path)
+
+            // Sheet
+            val sheet = workbook.createSheet("Transactions")
+            val headerRow = sheet.createRow(0)
+
+            // Creating header
+            for (i in 0..5) {
+                val cell = headerRow.createCell(i)
+                cell.setCellValue(when (i) {
+                    0 -> "ID"
+                    1 -> "Title"
+                    2 -> "Category"
+                    3 -> "Amount"
+                    4 -> "Location"
+                    5 -> "Date"
+                    else -> ""
+                })
+            }
+
+            if(fileType=="xlsx") {
+                // Header
+                val headerStyle = workbook.createCellStyle()
+                headerStyle.alignment = HorizontalAlignment.CENTER;
+                headerStyle.fillPattern = FillPatternType.SOLID_FOREGROUND;
+                headerStyle.borderTop = BorderStyle.MEDIUM;
+                headerStyle.borderBottom = BorderStyle.MEDIUM;
+                headerStyle.borderRight = BorderStyle.MEDIUM;
+                headerStyle.borderLeft = BorderStyle.MEDIUM;
+                headerStyle.fillForegroundColor = IndexedColors.BLUE_GREY.getIndex();
+
+                // Font
+                val font: Font = workbook.createFont()
+                font.fontHeightInPoints = 12.toShort()
+                font.bold = true
+                font.color = IndexedColors.WHITE.getIndex()
+                headerStyle.setFont(font)
+
+                for (i in 0..5) {
+                    val cell = headerRow.createCell(i)
+                    cell.cellStyle = headerStyle
+                }
+            }
+
+            // Populating the rows with data
+            transactions.forEachIndexed { index, transaction ->
+                val row = sheet.createRow(index + 1)
+                row.createCell(0).setCellValue(transaction.id.toDouble())
+                row.createCell(1).setCellValue(transaction.title)
+                row.createCell(2).setCellValue(transaction.category.name)
+                row.createCell(3).setCellValue(transaction.amount)
+                row.createCell(4).setCellValue(transaction.location?.address.toString() ?: "N/A") // Customize based on your LocationData toString() method
+                row.createCell(5).setCellValue(transaction.date)
+
+                // Set column width for each column individually
+                for (i in 0 until 6) {
+                    val cellWidth = when (i) {
+                        0 -> transaction.id.toString().length + 5
+                        1 -> transaction.title.length + 5
+                        2 -> transaction.category.name.length + 10
+                        3 -> transaction.amount.toString().length + 10
+                        4 -> (transaction.location?.toString()?.length ?: 3)  // Adjust for "N/A" length
+                        5 -> transaction.date.length + 10
+                        else -> 0
+                    }
+                    sheet.setColumnWidth(i, cellWidth * 256)
+                }
+            }
+
+            workbook.write(outputStream)
+            outputStream.close()
+            workbook.close()
+            Toast.makeText(requireContext(), "Data successfully saved!", Toast.LENGTH_SHORT).show();
+
+            return path.absolutePath
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return ""
+        }
+    }
+
+    companion object {
+        private const val TAG = "CameraXApp"
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        private val REQUIRED_PERMISSIONS =
+            mutableListOf (
+                Manifest.permission.READ_MEDIA_IMAGES,
+                Manifest.permission.READ_MEDIA_VIDEO
+            ).apply {
+            }.toTypedArray()
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
