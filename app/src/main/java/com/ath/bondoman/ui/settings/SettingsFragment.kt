@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -286,8 +287,15 @@ class SettingsFragment : Fragment() {
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private val REQUIRED_PERMISSIONS =
             mutableListOf (
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.READ_MEDIA_VIDEO
+                if(Build.VERSION.SDK_INT >32) {
+                    Manifest.permission.READ_MEDIA_IMAGES;
+                    Manifest.permission.READ_MEDIA_VIDEO
+                }else if(Build.VERSION.SDK_INT>29){
+                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                }else{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                }
             ).apply {
             }.toTypedArray()
     }
