@@ -1,26 +1,21 @@
 package com.ath.bondoman.ui.settings
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.ath.bondoman.TransactionFormBroadcastReceiver
+import com.ath.bondoman.receiver.TransactionFormBroadcastReceiver
 import com.ath.bondoman.VerifyJwtService
 import com.ath.bondoman.databinding.FragmentSettingsBinding
 import com.ath.bondoman.model.Transaction
-import com.ath.bondoman.repository.TokenRepository
 import com.ath.bondoman.repository.TransactionRepository
 import com.ath.bondoman.viewmodel.TokenViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 import kotlin.random.Random
 

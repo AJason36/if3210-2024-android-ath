@@ -38,7 +38,7 @@
         </activity>
         <activity android:name=".TransactionFormActivity" android:exported="true">
         </activity>
-        <receiver android:name=".TransactionFormBroadcastReceiver" android:exported="false">
+        <receiver android:name=".receiver.TransactionFormBroadcastReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="com.ath.bondoman.TransactionFormBroadcastReceiver.TRANSACTION_FORM_BROADCAST_RECEIVER" />
             </intent-filter>

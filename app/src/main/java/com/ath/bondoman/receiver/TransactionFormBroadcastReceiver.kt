@@ -1,8 +1,9 @@
-package com.ath.bondoman
+package com.ath.bondoman.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import com.ath.bondoman.TransactionFormActivity
 
 class TransactionFormBroadcastReceiver : BroadcastReceiver() {
     companion object {

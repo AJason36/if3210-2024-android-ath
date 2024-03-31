@@ -94,7 +94,7 @@ class TransactionFormActivity : AppCompatActivity() {
 
         val backBtn = binding.transactionFormBackBtn
         backBtn.setOnClickListener {
-            finish()
+            onBackPressed()
         }
 
         // Initialize the Spinner for the Category field
