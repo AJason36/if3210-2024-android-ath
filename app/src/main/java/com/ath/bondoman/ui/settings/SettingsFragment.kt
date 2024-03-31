@@ -323,8 +323,15 @@ class SettingsFragment : Fragment() {
         @RequiresApi(Build.VERSION_CODES.TIRAMISU)
         private val REQUIRED_PERMISSIONS =
             mutableListOf (
-                Manifest.permission.READ_MEDIA_IMAGES,
-                Manifest.permission.READ_MEDIA_VIDEO
+                if(Build.VERSION.SDK_INT >32) {
+                    Manifest.permission.READ_MEDIA_IMAGES;
+                    Manifest.permission.READ_MEDIA_VIDEO
+                }else if(Build.VERSION.SDK_INT>29){
+                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                }else{
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                }
             ).apply {
             }.toTypedArray()
     }
