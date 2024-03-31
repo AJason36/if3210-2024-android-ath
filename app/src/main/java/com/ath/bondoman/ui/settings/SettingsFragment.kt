@@ -91,7 +91,7 @@ class SettingsFragment : Fragment() {
 
         val xlsExportButton = binding.xlsExportButton
         val xlsxExportButton = binding.xlsxExportButton
-        var filePath:Uri
+        var filePath:String
         xlsExportButton.setOnClickListener{
             if (allPermissionsGranted()) {
                 Toast.makeText(requireContext(), "Exporting transactions...", Toast.LENGTH_SHORT).show()
@@ -123,13 +123,13 @@ class SettingsFragment : Fragment() {
     }
 
     private fun sendEmail(transactions: List<Transaction>) {
-        val uri:Uri = exportTransactionsToExcel(transactions,"xlsx",requireContext())
-//        val file: File = File(filePath)
-//        val uri: Uri = FileProvider.getUriForFile(
-//            requireContext(),
-//            "${requireContext().applicationContext.packageName}.provider",
-//            file
-//        )
+        val filePath = exportTransactionsToExcel(transactions,"xlsx",requireContext())
+        val file: File = File(filePath)
+        val uri: Uri = FileProvider.getUriForFile(
+            requireContext(),
+            "${requireContext().applicationContext.packageName}.provider",
+            file
+        )
         val emailIntent = Intent(Intent.ACTION_SEND)
         emailIntent.setType("application/vnd.ms-excel")
         emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(tokenViewModel.token.value?.email))
@@ -175,7 +175,7 @@ class SettingsFragment : Fragment() {
         ContextCompat.checkSelfPermission(
             requireContext(), it) == PackageManager.PERMISSION_GRANTED
     }
-    private fun exportTransactionsToExcel(transactions: List<Transaction>, fileType: String, context: Context): Uri {
+    private fun exportTransactionsToExcel(transactions: List<Transaction>, fileType: String, context: Context): String {
 
         val strDate: String =
             SimpleDateFormat("dd-MM-yyyy HH-mm-ss", Locale.getDefault()).format(Date())
@@ -220,22 +220,22 @@ class SettingsFragment : Fragment() {
                 // Header
                 val headerStyle = workbook.createCellStyle()
                 headerStyle.alignment = HorizontalAlignment.CENTER;
+                headerStyle.fillForegroundColor = IndexedColors.BLUE_GREY.getIndex();
                 headerStyle.fillPattern = FillPatternType.SOLID_FOREGROUND;
                 headerStyle.borderTop = BorderStyle.MEDIUM;
                 headerStyle.borderBottom = BorderStyle.MEDIUM;
                 headerStyle.borderRight = BorderStyle.MEDIUM;
                 headerStyle.borderLeft = BorderStyle.MEDIUM;
-                headerStyle.fillForegroundColor = IndexedColors.BLUE_GREY.getIndex();
 
                 // Font
                 val font: Font = workbook.createFont()
                 font.fontHeightInPoints = 12.toShort()
-                font.bold = true
                 font.color = IndexedColors.WHITE.getIndex()
+                font.bold = true
                 headerStyle.setFont(font)
 
                 for (i in 0..5) {
-                    val cell = headerRow.createCell(i)
+                    val cell = headerRow.getCell(i)
                     cell.cellStyle = headerStyle
                 }
             }
@@ -257,7 +257,7 @@ class SettingsFragment : Fragment() {
                         1 -> transaction.title.length + 5
                         2 -> transaction.category.name.length + 10
                         3 -> transaction.amount.toString().length + 10
-                        4 -> (transaction.location?.toString()?.length ?: 3)  // Adjust for "N/A" length
+                        4 -> (transaction.location?.toString()?.length ?: 3) / 2 // Adjust for "N/A" length
                         5 -> transaction.date.length + 10
                         else -> 0
                     }
@@ -270,18 +270,14 @@ class SettingsFragment : Fragment() {
             workbook.close()
             Toast.makeText(requireContext(), "Data successfully saved!", Toast.LENGTH_SHORT).show();
 
-            return FileProvider.getUriForFile(
-                    context,
-                "${requireContext().applicationContext.packageName}.provider",
-                path
-            )
+//            return FileProvider.getUriForFile(
+//                    context,
+//                "${requireContext().applicationContext.packageName}.provider",
+//                path
+            return path.absolutePath
         } catch (e: IOException) {
             e.printStackTrace()
-            return FileProvider.getUriForFile(
-                context,
-                "${requireContext().applicationContext.packageName}.provider",
-                root
-            )
+            return ""
         }
     }
 
