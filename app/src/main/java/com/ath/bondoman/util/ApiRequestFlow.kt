@@ -22,15 +22,12 @@ fun<T> apiRequestFlow(call: suspend () -> Response<T>): Flow<ApiResponse<T>> = f
             } else {
                 response.errorBody()?.let { error ->
                     error.close()
-                    val message = when(response.code()) {
-                        401 -> "Invalid email/password"
-                        else -> "[${response.code()}] ${response.message()}"
-                    }
-                    emit(ApiResponse.Failure(message))
+                    val message = "[${response.code()}] ${response.message()}"
+                    emit(ApiResponse.Failure(message, response.code()))
                 }
             }
         } catch (e: Exception) {
-            emit(ApiResponse.Failure(e.message ?: e.toString()))
+            emit(ApiResponse.Failure(e.message ?: e.toString(), 500))
         }
-    } ?: emit(ApiResponse.Failure("Request timed out"))
+    } ?: emit(ApiResponse.Failure("Request timed out", 500))
 }.flowOn(Dispatchers.IO)
