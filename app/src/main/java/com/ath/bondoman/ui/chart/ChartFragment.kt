@@ -63,7 +63,6 @@ class ChartFragment : Fragment() {
 
         val anyChartView: AnyChartView=binding.anyChartView
         chartViewModel.allIncome.observe(viewLifecycleOwner) { income ->
-            Log.d("Income", income.toString())
             // Update Income entry
             data[0] = ValueDataEntry("Income", income)
             // Refresh the chart

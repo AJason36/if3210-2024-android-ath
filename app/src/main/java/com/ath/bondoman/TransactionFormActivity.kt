@@ -143,7 +143,6 @@ class TransactionFormActivity : AppCompatActivity() {
 
         val openGMapsButton = binding.transactionFormOpenInGmapsButton
         openGMapsButton.setOnClickListener {
-            Log.d("GMAPS", "Clicked yow")
             val location = if (mode == MODE_ADD) {
                 currentLocation
             } else {

@@ -14,7 +14,6 @@ class NetworkChangeReceiver(private val context: Context) : BroadcastReceiver() 
 
     private fun showNetworkAlertDialog() {
         val builder = AlertDialog.Builder(this.context)
-        Log.d("[ALERT DIALOG]", this.context.toString())
         builder.setTitle("No Internet Connection")
             .setMessage("Your device is currently not connected to the internet. Some features might not be available at the moment.")
             .setPositiveButton("OK", null)
