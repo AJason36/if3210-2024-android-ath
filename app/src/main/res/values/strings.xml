@@ -43,4 +43,6 @@
     <string name="password_error_text">Password is required</string>
     <string name="login_btn_text">LOGIN</string>
     <string name="welcome_back_title">Welcome Back</string>
+    <string name="export_as_excel_xslx_text">Export as Excel (.xslx)</string>
+    <string name="export_as_excel_xls_text">Export as Excel (.xls)</string>
 </resources>

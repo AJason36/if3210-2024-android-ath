@@ -18,6 +18,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -48,7 +49,6 @@ android {
 }
 
 dependencies {
-
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
@@ -91,7 +91,11 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
 
-    implementation ("com.github.AnyChart:AnyChart-Android:1.1.5")
-    implementation ("androidx.security:security-crypto:1.1.0-alpha06")
+    implementation("com.github.AnyChart:AnyChart-Android:1.1.5")
+
+    implementation("org.apache.poi:poi:5.2.5")
+    implementation("org.apache.poi:poi-ooxml:5.2.5")
+    implementation("com.android.support:multidex:1.0.3")
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 
 }

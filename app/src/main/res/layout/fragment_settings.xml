@@ -90,6 +90,27 @@
                     android:drawablePadding="6dp"
                     android:text="@string/randomize_transaction_option"
                     android:textAlignment="viewStart" />
+
+                <android.widget.Button
+                    android:id="@+id/xlsx_export_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Button.Ghost"
+                    android:text="@string/export_as_excel_xslx_text"
+                    android:textAlignment="viewStart"
+                    android:drawableStart="@drawable/ic_download"
+                    android:drawablePadding="6dp"
+                    />
+                <android.widget.Button
+                    android:id="@+id/xls_export_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Button.Ghost"
+                    android:text="@string/export_as_excel_xls_text"
+                    android:textAlignment="viewStart"
+                    android:drawableStart="@drawable/ic_download"
+                    android:drawablePadding="6dp"
+                    />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
