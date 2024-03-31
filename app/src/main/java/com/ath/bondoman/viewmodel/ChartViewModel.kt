@@ -13,7 +13,7 @@ import javax.inject.Inject
 class ChartViewModel @Inject constructor(private val repository: TransactionRepository) : ViewModel(){
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is chart Fragment"
+        value = "There is no transaction"
     }
     val text: LiveData<String> = _text
     val allIncome: LiveData<Double> = repository.getAllIncome().asLiveData(Dispatchers.IO)
