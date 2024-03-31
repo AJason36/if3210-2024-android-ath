@@ -91,12 +91,23 @@
                     android:textAlignment="viewStart" />
 
                 <android.widget.Button
+                    android:id="@+id/xlsx_export_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/Button.Ghost"
-                    android:text="Option 3"
+                    android:text="Export as Excel (.xslx)"
                     android:textAlignment="viewStart"
-                    android:drawableStart="@drawable/ic_settings"
+                    android:drawableStart="@drawable/ic_download"
+                    android:drawablePadding="6dp"
+                    />
+                <android.widget.Button
+                    android:id="@+id/xls_export_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Button.Ghost"
+                    android:text="Export as Excel (.xls)"
+                    android:textAlignment="viewStart"
+                    android:drawableStart="@drawable/ic_download"
                     android:drawablePadding="6dp"
                     />
             </LinearLayout>
