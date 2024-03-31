@@ -28,7 +28,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/title_settings"
                 android:textSize="28sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
         </LinearLayout>
 

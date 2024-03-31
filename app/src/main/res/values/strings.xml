@@ -28,7 +28,7 @@
     <string name="transaction_form_open_in_gmaps_text">Open in Google Maps</string>
     <string name="no_transaction">There is no transaction</string>
     <string name="send_transactions_option">Send transactions</string>
-    <string name="randomize_transaction_option">Randomize Transaction</string>
+    <string name="randomize_transaction_option">Randomize transactions</string>
     <string name="logout_btn_text">Logout</string>
     <string name="date_label">Date</string>
     <string name="category_label">Category</string>
