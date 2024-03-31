@@ -10,15 +10,15 @@ import kotlinx.coroutines.flow.Flow
 class TokenRepository @Inject constructor(
     private val tokenDataStore: TokenDataStore,
 ) {
-    fun getToken(): Flow<Token?>  {
+    fun getToken(): Token? {
         return tokenDataStore.getToken()
     }
 
-    suspend fun saveToken(token: Token) {
+    fun saveToken(token: Token) {
         tokenDataStore.saveToken(token)
     }
 
-    suspend fun removeToken() {
+    fun removeToken() {
         tokenDataStore.removeToken()
     }
 }

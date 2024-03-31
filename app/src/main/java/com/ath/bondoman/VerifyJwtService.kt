@@ -44,10 +44,9 @@ class VerifyJwtService: Service() {
         val isConnected = isNetworkAvailable(this)
         if (isConnected) {
             CoroutineScope(Dispatchers.IO + job).launch {
-                tokenRepository.getToken().collect { token ->
-                    if (token != null) {
-                        fetchTokenResult(token.token)
-                    }
+                val token = tokenRepository.getToken()
+                if (token != null) {
+                    fetchTokenResult(token.token)
                 }
             }
         } else {

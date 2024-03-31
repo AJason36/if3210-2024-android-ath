@@ -2,40 +2,46 @@ package com.ath.bondoman.data.datastore
 
 import android.content.Context
 import android.util.Log
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import com.ath.bondoman.di.datastore
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.ath.bondoman.model.Token
 import com.google.gson.Gson
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 
 class TokenDataStore(private val context: Context) {
     companion object {
-        private val TOKEN_KEY = stringPreferencesKey("auth_token")
+        private const val PREF_NAME = "encrypted_prefs"
+        private const val TOKEN_KEY = "auth_token"
     }
 
     private val gson = Gson()
 
-    fun getToken(): Flow<Token?> {
-        return context.datastore.data.map { preferences ->
-            val tokenString = preferences[TOKEN_KEY]
-            Log.d("AUTH", tokenString.toString())
-            tokenString?.let { gson.fromJson(it, Token::class.java) }
-        }
+    private val masterKey: MasterKey by lazy {
+        MasterKey.Builder(context)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
     }
 
-    suspend fun saveToken(token: Token) {
+    private val sharedPreferences by lazy {
+        EncryptedSharedPreferences.create(
+            context,
+            PREF_NAME,
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
+
+    fun getToken(): Token? {
+        val tokenString = sharedPreferences.getString(TOKEN_KEY, null)
+        return tokenString?.let { gson.fromJson(it, Token::class.java) }
+    }
+
+    fun saveToken(token: Token) {
         val tokenString = gson.toJson(token)
-        Log.d("TOKEN STRING", tokenString)
-        context.datastore.edit { preferences ->
-            preferences[TOKEN_KEY] = tokenString
-        }
+        sharedPreferences.edit().putString(TOKEN_KEY, tokenString).apply()
     }
 
-    suspend fun removeToken() {
-        context.datastore.edit { preferences ->
-            preferences.remove(TOKEN_KEY)
-        }
+    fun removeToken() {
+        sharedPreferences.edit().remove(TOKEN_KEY).apply()
     }
 }
