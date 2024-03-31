@@ -3,19 +3,22 @@ package com.ath.bondoman.ui.scan
 import android.Manifest
 import android.content.ContentValues
 import android.content.pm.PackageManager
-import android.os.Build
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
@@ -28,38 +31,27 @@ import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-
 class ScanFragment : Fragment() {
 
     private var _binding: FragmentScanBinding? = null
-
     private val binding get() = _binding!!
     private var imageCapture: ImageCapture? = null
     private lateinit var cameraExecutor: ExecutorService
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        uri?.let {
+            val imageView: ImageView = binding.capturedImage
+            imageView.setImageURI(uri)
+            imageView.visibility = View.VISIBLE
+            binding.viewFinder.visibility=View.GONE
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = FragmentScanBinding.inflate(layoutInflater)
-    }
-    private val activityResultLauncher =
-        registerForActivityResult(
-            ActivityResultContracts.RequestMultiplePermissions())
-        { permissions ->
-            // Handle Permission granted/rejected
-            var permissionGranted = true
-            permissions.entries.forEach {
-                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
-                    permissionGranted = false
-            }
-            if (!permissionGranted) {
-                Toast.makeText(requireContext(),
-                    "Permission request denied",
-                    Toast.LENGTH_SHORT).show()
-            } else {
-                startCamera()
-            }
-        }
 
+    }
+    
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
 
@@ -68,9 +60,6 @@ class ScanFragment : Fragment() {
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            if(Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
-            }
         }
 
         // output: file + metadata
@@ -82,18 +71,21 @@ class ScanFragment : Fragment() {
 
         // Set up image capture listener
         imageCapture.takePicture(
-            outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
-            object : ImageCapture.OnImageSavedCallback {
+            object : ImageCapture.OnImageCapturedCallback() {
                 override fun onError(exc: ImageCaptureException) {
                     Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                 }
 
-                override fun
-                        onImageSaved(output: ImageCapture.OutputFileResults){
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
-                    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, msg)
+                override fun onCaptureSuccess(image: ImageProxy) {
+                    super.onCaptureSuccess(image)
+                    val bitmap = imageProxyToBitmap(image)
+                    image.close()
+
+                    // Update the ViewModel
+                    binding.capturedImage.setImageBitmap(bitmap)
+                    binding.capturedImage.visibility=View.VISIBLE
+                    binding.viewFinder.visibility=View.GONE
                 }
             }
         )
@@ -130,6 +122,13 @@ class ScanFragment : Fragment() {
         }, ContextCompat.getMainExecutor(requireContext() ))
     }
 
+    private fun imageProxyToBitmap(image: ImageProxy): Bitmap {
+        val planeProxy = image.planes[0]
+        val buffer = planeProxy.buffer
+        val bytes = ByteArray(buffer.remaining())
+        buffer.get(bytes)
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+    }
     private fun requestPermissions() {
         activityResultLauncher.launch(REQUIRED_PERMISSIONS)
     }
@@ -137,6 +136,30 @@ class ScanFragment : Fragment() {
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
             requireContext(), it) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private val activityResultLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestMultiplePermissions())
+        { permissions ->
+            // Handle Permission granted/rejected
+            var permissionGranted = true
+            permissions.entries.forEach {
+                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
+                    permissionGranted = false
+            }
+            if (!permissionGranted) {
+                Toast.makeText(requireContext(),
+                    "Permission request denied",
+                    Toast.LENGTH_SHORT).show()
+            } else {
+                startCamera()
+            }
+        }
+
+    // To open the gallery
+    private fun pickImageFromGallery() {
+        pickImageLauncher.launch("image/*")
     }
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -159,12 +182,17 @@ class ScanFragment : Fragment() {
         // Set up the listeners for take photo
         imageCaptureButton.setOnClickListener { takePhoto() }
 
+        val galleryButton = binding.galleryButton
+        // Set up the listeners for choose photo
+        galleryButton.setOnClickListener { pickImageFromGallery() }
+
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        val textView: TextView = binding.textScan
-        scanViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        val imageView: ImageView= binding.capturedImage
+        scanViewModel.imageBitmap.observe(viewLifecycleOwner){
+            imageView.setImageBitmap(it)
         }
+
         return root
     }
 
@@ -180,9 +208,6 @@ class ScanFragment : Fragment() {
             mutableListOf (
                 Manifest.permission.CAMERA,
             ).apply {
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                }
             }.toTypedArray()
     }
 }
