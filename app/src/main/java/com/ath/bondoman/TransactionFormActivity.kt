@@ -232,6 +232,11 @@ class TransactionFormActivity : AppCompatActivity() {
 
         val amountDouble = NumberFormatUtils.removeThousandsSeparator(amount).toDouble()
 
+        if (amountDouble == 0.0) {
+            amountField.error = "Amount cannot be 0"
+            return
+        }
+
         if (mode == MODE_ADD) {
             val transactionDTO = InsertTransactionDTO(
                 title = title,
