@@ -55,6 +55,7 @@
     <string name="transaction_title_text">Title</string>
     <string name="account_icon_content_desc">Account Icon</string>
     <string name="account_placeholder">EMAIL</string>
+    <string name="graph">Graph</string>
     <string name="transaction_header_title">Transaction Header Title</string>
     <string name="settings_header_title">Settings Header Title</string>
 </resources>
