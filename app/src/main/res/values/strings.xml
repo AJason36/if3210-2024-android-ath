@@ -45,6 +45,13 @@
     <string name="welcome_back_title">Welcome Back</string>
     <string name="export_as_excel_xslx_text">Export as Excel (.xslx)</string>
     <string name="export_as_excel_xls_text">Export as Excel (.xls)</string>
+    <string name="retake_image">RETAKE</string>
+    <string name="save_image">SAVE</string>
+    <string name="title_scanned_bill">Scanned Bill</string>
+    <string name="switch_camera">switch camera</string>
+    <string name="display_image">display image</string>
+    <string name="title">Title</string>
+    <string name="quantity_label">Quantity</string>
     <string name="transaction_title_text">Title</string>
     <string name="account_icon_content_desc">Account Icon</string>
     <string name="account_placeholder">EMAIL</string>
