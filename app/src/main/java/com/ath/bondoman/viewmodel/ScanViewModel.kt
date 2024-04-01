@@ -60,7 +60,7 @@ class ScanViewModel @Inject constructor(
 
     fun createTransactionFromItems(items: List<Item>): Transaction {
         val totalAmount = items.sumOf { it.qty * it.price }
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = dateFormat.format(Date())
         val transactionName = "Transaction_$currentDate"
 
@@ -69,7 +69,7 @@ class ScanViewModel @Inject constructor(
             amount = totalAmount,
             location = null,
             category = TransactionCategory.Expenditure,
-            date = currentDate.split("_")[0] // Get only the date part
+            date = currentDate
         )
     }
 }
