@@ -10,7 +10,8 @@ import android.provider.Settings
 import androidx.core.content.ContextCompat
 
 fun isLocationPermissionGranted(context: Context): Boolean {
-    return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    return ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
 }
 
 fun showLocationPermissionDialog(context: Context, packageName: String) {
@@ -18,10 +19,9 @@ fun showLocationPermissionDialog(context: Context, packageName: String) {
         .setTitle("Location Permission Needed")
         .setMessage("This app needs the Location permission to get your current location. Please grant the permission.")
         .setPositiveButton("Open Settings") { _, _ ->
-            // Intent to open the app's system settings
+            // Intent to open the specific app settings
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val uri = Uri.fromParts("package", packageName, null)
-            intent.data = uri
+            intent.data = Uri.fromParts("package", packageName, null)
             context.startActivity(intent)
         }
         .setNegativeButton("Cancel") { dialog, _ ->

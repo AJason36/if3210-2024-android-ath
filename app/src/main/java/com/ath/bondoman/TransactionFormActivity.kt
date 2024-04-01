@@ -20,6 +20,8 @@ import android.widget.Toast
 import com.ath.bondoman.viewmodel.TransactionViewModel
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import android.Manifest
+import androidx.core.app.ActivityCompat
 import com.ath.bondoman.model.LocationData
 import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.dto.InsertTransactionDTO
@@ -199,17 +201,28 @@ class TransactionFormActivity : AppCompatActivity() {
     private fun fetchLocation(askPermission: Boolean = false) {
         if (isLocationPermissionGranted(this)) {
             binding.transactionFormLocationField.text = "Retrieving Location…"
+            binding.transactionFormOpenInGmapsButton.visibility = View.VISIBLE
 
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             locationViewModel.fetchLocation(this, fusedLocationClient)
         } else {
             binding.transactionFormLocationField.text = "Location is disabled"
+            binding.transactionFormOpenInGmapsButton.visibility = View.GONE
 
             if (askPermission) {
-                showLocationPermissionDialog(this, packageName)
+                if (!(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION))) {
+                    showLocationPermissionDialog(this, packageName)
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                        PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+                    )
+                }
             }
         }
     }
+
 
     private fun saveTransaction() {
         val titleField = binding.transactionFormTitleField
