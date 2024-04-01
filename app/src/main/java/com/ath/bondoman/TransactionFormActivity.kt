@@ -237,6 +237,10 @@ class TransactionFormActivity : AppCompatActivity() {
             return
         }
 
+        if (currentLocation == null) {
+            currentLocation = LocationData()
+        }
+
         if (mode == MODE_ADD) {
             val transactionDTO = InsertTransactionDTO(
                 title = title,

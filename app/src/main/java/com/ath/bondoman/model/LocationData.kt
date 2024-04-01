@@ -8,10 +8,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class LocationData(
-    val latitude: Double,
-    val longitude: Double,
-    val address: String
+    val latitude: Double = -6.891130664299551,
+    val longitude: Double = 107.6106074222042,
+    val address: String = "Jl. Ganesa No.10, Lb. Siliwangi, Kecamatan Coblong, Kota Bandung, Jawa Barat 40132"
 ) : Parcelable
+
 
 class LocationDataTypeConverter {
 
