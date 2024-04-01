@@ -76,6 +76,7 @@ class TransactionFormActivity : AppCompatActivity() {
 
             // Location
             binding.transactionFormLocationField.text = transaction?.location?.address ?: "No location specified"
+            currentLocation = transaction?.location
         } else {
             // Hide date
             binding.transactionFormDateLabel.visibility = View.GONE
@@ -143,13 +144,8 @@ class TransactionFormActivity : AppCompatActivity() {
 
         val openGMapsButton = binding.transactionFormOpenInGmapsButton
         openGMapsButton.setOnClickListener {
-            val location = if (mode == MODE_ADD) {
-                currentLocation
-            } else {
-                transaction?.location
-            }
-            location?.let {
-                val gmmIntentUri = Uri.parse("geo:0,0?q=${it.latitude},${it.longitude}")
+            currentLocation?.let {
+                val gmmIntentUri = Uri.parse("geo:0,0?q=${it.latitude},${it.longitude}(${Uri.encode(it.address)})")
                 val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
                 mapIntent.setPackage("com.google.android.apps.maps")
                 if (mapIntent.resolveActivity(packageManager) != null) {
