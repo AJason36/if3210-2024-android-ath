@@ -16,12 +16,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="143dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/bg_app_bar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:paddingTop="40dp"
+            android:paddingBottom="60dp"
             android:paddingStart="30dp"
             android:outlineProvider="none"
             tools:ignore="RtlSymmetry">
@@ -31,8 +32,8 @@
                 android:text="@string/title_settings"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:textColor="@color/white"/>
-
+                android:textColor="@color/white"
+                android:contentDescription="@string/settings_header_title"/>
         </LinearLayout>
 
 
@@ -62,7 +63,7 @@
                     android:contentDescription="@string/account_icon_content_desc"
                     android:src="@drawable/ic_account_circle"
                     android:background="@drawable/circular_background"
-                    app:tint="?attr/colorSecondary"
+                    app:tint="@color/white"
                     android:padding="10dp"
                     android:layout_marginBottom="8dp"/>
 

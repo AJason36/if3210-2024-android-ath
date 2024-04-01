@@ -11,12 +11,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green_400">#b0df86</color>
+    <color name="green_500">#568032</color>
     <color name="green_700">#185c31</color>
     <color name="cream_400">#fff1f2</color>
     <color name="gray_300">#f4f4f5</color>
     <color name="gray_400">#cccccf</color>
     <color name="gray_600">#71717a</color>
     <color name="gray_700">#18181b</color>
-    <color name="rose_400">#f26a6a</color>
+    <color name="rose_400">#F44444</color>
     <color name="transparent">#00000000</color>
 </resources>
