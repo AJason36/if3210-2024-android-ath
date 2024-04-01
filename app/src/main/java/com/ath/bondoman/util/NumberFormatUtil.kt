@@ -45,8 +45,9 @@ object NumberFormatUtils {
         })
     }
 
-    fun formatNumberString(numberString: String): String {
-        val cleanString = numberString.replace(",", "")
+    fun formatNumberString(number: Double): String {
+        val roundedNumber = String.format("%.2f", number)
+        val cleanString = roundedNumber.replace(",", "")
         val parts = cleanString.split(".")
         val formatted = StringBuilder(parts[0].reversed().chunked(3).joinToString(",").reversed())
         if (parts.size > 1 && parts[1].toInt() != 0) {

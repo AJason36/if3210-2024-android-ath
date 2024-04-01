@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ath.bondoman.api.UploadClient
+import com.ath.bondoman.model.LocationData
 import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.TransactionCategory
 import com.ath.bondoman.model.dto.ApiResponse
@@ -43,8 +44,6 @@ class ScanViewModel @Inject constructor(
         uploadResponse,
         coroutinesErrorHandler
     ){
-        Log.d("NetworkCall", "Token: $token")
-        Log.d("NetworkCall", "Request Body: $payload")
 
         apiRequestFlow { uploadClient.upload("Bearer $token", payload) }.onCompletion {
             // Log the response after the network call is completed
@@ -61,14 +60,15 @@ class ScanViewModel @Inject constructor(
 
     fun createTransactionFromItems(items: List<Item>): Transaction {
         val totalAmount = items.sumOf { it.qty * it.price }
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd_HH:mm:ss", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = dateFormat.format(Date())
         val transactionName = "Transaction_$currentDate"
+        val location = LocationData()
 
         return Transaction(
             title = transactionName,
             amount = totalAmount,
-            location = null,
+            location = location,
             category = TransactionCategory.Expenditure,
             date = currentDate.split("_")[0],
             userEmail = tokenRepository.getToken()?.email ?: ""

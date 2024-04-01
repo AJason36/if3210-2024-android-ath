@@ -56,7 +56,7 @@ _M8: Security Misconfiguration_
 Security misconfiguration refers to the improper configuration of security settings, permissions, or access controls in an application or its underlying infrastructure. It occurs when default settings are not changed, unnecessary services are enabled, or sensitive information is exposed, leading to potential security breaches and unauthorized access.
 For mitigation, BondoMan:
 
-1. Only requests for necessary permissions 
+1. Only requests for necessary permissions <br/>
 ![image](doc/permissions.png)
 - ACCESS_NETWORK_STATE for Network Sensing and HTTPS requests
 - INTERNET for Network Sensing and HTTPS requests
@@ -73,9 +73,9 @@ _M9: Insecure Data Storage_
 Insecure data storage refers to the improper handling and storage of sensitive data in an application. It occurs when sensitive information is stored in plaintext, improperly encrypted, or stored in insecure locations, making it vulnerable to unauthorized access or disclosure.
 
 BondoMan mitigates this issue by:
-1. Uses EncryptedSharedPreferences to store JWT token because it can't be accessed by other apps and it is encrypted.
+1. Uses EncryptedSharedPreferences to store JWT token because it can't be accessed by other apps and it is encrypted. <br/>
 ![image](doc/shared_preferences.png)
-2. Uses RoomDB for secure data storing and access.
+2. Uses RoomDB for secure data storing and access. <br/>
 ![image](doc/database.png)
 3. Doesn't store sensitive data.
 
