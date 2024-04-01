@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.dto.InsertTransactionDTO
 import com.ath.bondoman.model.dto.UpdateTransactionDTO
+import com.ath.bondoman.repository.TokenRepository
 import com.ath.bondoman.repository.TransactionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,13 +17,15 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class TransactionViewModel @Inject constructor(private val repository: TransactionRepository) : ViewModel() {
+class TransactionViewModel @Inject constructor(private val repository: TransactionRepository, private val tokenRepository: TokenRepository) : ViewModel() {
+    private val userEmail = tokenRepository.getToken()?.email ?: ""
+
     private val _text = MutableLiveData<String>().apply {
         value = "This is transaction Fragment"
     }
     val text: LiveData<String> = _text
 
-    val allTransactions: LiveData<List<Transaction>> = repository.getAll().asLiveData(Dispatchers.IO)
+    val allTransactions: LiveData<List<Transaction>> = repository.getAll(userEmail).asLiveData(Dispatchers.IO)
 
     private val _insertResult = MutableLiveData<Long>()
     val insertResult: LiveData<Long> = _insertResult
@@ -37,7 +40,8 @@ class TransactionViewModel @Inject constructor(private val repository: Transacti
                 title = transactionDTO.title,
                 category = transactionDTO.category,
                 amount = transactionDTO.amount,
-                location = transactionDTO.location
+                location = transactionDTO.location,
+                userEmail = userEmail
             )
             try {
                 val rowId = withContext(Dispatchers.IO) {
@@ -59,7 +63,8 @@ class TransactionViewModel @Inject constructor(private val repository: Transacti
                 category = transactionDTO.category,
                 amount = transactionDTO.amount,
                 location = transactionDTO.location,
-                date = transactionDTO.date
+                date = transactionDTO.date,
+                userEmail = userEmail
             )
             val rowId = withContext(Dispatchers.IO) {
                 repository.update(transaction)

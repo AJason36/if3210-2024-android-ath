@@ -10,6 +10,7 @@ import com.ath.bondoman.model.TransactionCategory
 import com.ath.bondoman.model.dto.ApiResponse
 import com.ath.bondoman.model.dto.Item
 import com.ath.bondoman.model.dto.UploadResponse
+import com.ath.bondoman.repository.TokenRepository
 import com.ath.bondoman.util.apiRequestFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.onCompletion
@@ -22,8 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ScanViewModel @Inject constructor(
     private val uploadClient: UploadClient,
+    private val tokenRepository: TokenRepository
 ): BaseViewModel() {
-
     private val _imageBitmap = MutableLiveData<Bitmap>()
     val imageBitmap: LiveData<Bitmap> = _imageBitmap
 
@@ -69,7 +70,8 @@ class ScanViewModel @Inject constructor(
             amount = totalAmount,
             location = null,
             category = TransactionCategory.Expenditure,
-            date = currentDate.split("_")[0] // Get only the date part
+            date = currentDate.split("_")[0],
+            userEmail = tokenRepository.getToken()?.email ?: ""
         )
     }
 }
