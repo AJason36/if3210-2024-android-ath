@@ -16,7 +16,7 @@
     <string name="transaction_form_back_button">Back Button on Add Transaction</string>
     <string name="save_transaction_button">Save</string>
     <string name="transaction_form_title_label">Title</string>
-    <string name="transaction_form_amount_label">Amount</string>
+    <string name="transaction_form_amount_label">Amount ($)</string>
     <string name="transaction_form_category_label">Category</string>
     <string name="transaction_form_location_label">Location</string>
     <string name="transaction_form_enable_location_btn">Enable Location</string>
