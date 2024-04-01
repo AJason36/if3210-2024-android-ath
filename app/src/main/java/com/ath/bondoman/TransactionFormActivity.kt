@@ -49,6 +49,7 @@ class TransactionFormActivity : AppCompatActivity() {
 
     private var mode: Int = MODE_ADD
     private var transaction: Transaction? = null
+    private var categoryPosition: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,7 +74,11 @@ class TransactionFormActivity : AppCompatActivity() {
             binding.transactionFormAmountField.setText(transaction?.amount?.toString())
 
             // Category, not editable
-            val categoryPosition = transaction?.category?.ordinal ?: 0
+            categoryPosition = when (transaction?.category) {
+                TransactionCategory.Income -> 0
+                TransactionCategory.Expenditure -> 1
+                null -> 0
+            }
             binding.transactionFormCategoryField.setSelection(categoryPosition)
             binding.transactionFormCategoryField.isEnabled = false
 
@@ -108,9 +113,13 @@ class TransactionFormActivity : AppCompatActivity() {
         binding.transactionFormCategoryField.adapter = adapter
 
         // Set the default value for the Spinner
-        val defaultCategory = TransactionCategory.Income.name
-        val spinnerPosition = adapter.getPosition(defaultCategory)
-        binding.transactionFormCategoryField.setSelection(spinnerPosition)
+        if (mode == MODE_EDIT) {
+            binding.transactionFormCategoryField.setSelection(categoryPosition)
+        } else {
+            val defaultCategory = TransactionCategory.Income.name
+            val spinnerPosition = adapter.getPosition(defaultCategory)
+            binding.transactionFormCategoryField.setSelection(spinnerPosition)
+        }
 
         // Observe the location LiveData
         locationViewModel.location.observe(this, Observer { newLocation ->

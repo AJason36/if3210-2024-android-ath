@@ -29,7 +29,8 @@ data class Transaction(
     val category: TransactionCategory,
     val amount: Double,
     val location: LocationData?,
-    val date: String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+    val date: String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()),
+    val userEmail: String
 ): Parcelable
 
 

@@ -1,6 +1,7 @@
 package com.ath.bondoman.di
 
 import com.ath.bondoman.api.AuthClient
+import com.ath.bondoman.api.UploadClient
 import com.ath.bondoman.data.database.AppDatabase
 import com.ath.bondoman.data.datastore.TokenDataStore
 import com.ath.bondoman.model.dao.TransactionDao
@@ -27,6 +28,12 @@ class HiltModule {
         retrofit
             .build()
             .create(AuthClient::class.java)
+
+    @Provides
+    fun provideUploadClient(retrofit: Retrofit.Builder): UploadClient =
+        retrofit
+            .build()
+            .create(UploadClient::class.java)
 
     @Provides
     fun provideTransactionDao(database: AppDatabase): TransactionDao {

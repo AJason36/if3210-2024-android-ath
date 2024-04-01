@@ -10,7 +10,7 @@
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
     <ImageButton
         android:id="@+id/image_capture_button"
@@ -26,6 +26,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+
+    <ImageButton
+        android:id="@+id/switch_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_switch"
+        android:background="?attr/selectableItemBackground"
+        android:scaleType="centerCrop"
+        app:tint="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/image_capture_button"
+        app:layout_constraintTop_toBottomOf="@id/image_capture_button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/image_capture_button"
+        android:contentDescription="@string/switch_camera" />
 
     <ImageButton
         android:id="@+id/gallery_button"
@@ -57,6 +71,39 @@
         android:contentDescription="display image" />
 
     <LinearLayout
+        android:id="@+id/heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_app_bar"
+        android:padding="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/title_scanned_bill"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/items_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="140dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heading"
+        app:layout_constraintVertical_bias="0.0"
+        android:visibility="gone"/>
+
+    <LinearLayout
         android:id="@+id/action_buttons_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -64,7 +111,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="70dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         android:visibility="gone">
 
         <Button
@@ -72,7 +121,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
-            android:text="RETAKE"
+            android:text="@string/retake_image"
             android:textStyle="bold"
             android:layout_weight="1"
             android:background="@drawable/bg_primary_button"/>
@@ -82,7 +131,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
-            android:text="SAVE"
+            android:text="@string/save_image"
             android:textStyle="bold"
             android:layout_weight="1"
             android:background="@drawable/bg_primary_button"/>

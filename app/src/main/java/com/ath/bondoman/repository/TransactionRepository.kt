@@ -8,16 +8,16 @@ import javax.inject.Singleton
 
 @Singleton
 class TransactionRepository @Inject constructor(private val transactionDao: TransactionDao) {
-    fun getAll(): Flow<List<Transaction>> {
-        return transactionDao.getAll()
+    fun getAll(userEmail: String): Flow<List<Transaction>> {
+        return transactionDao.getAll(userEmail)
     }
 
-    fun getAllIncome(): Flow<Double>{
-        return transactionDao.getAllIncome()
+    fun getAllIncome(userEmail: String): Flow<Double>{
+        return transactionDao.getAllIncome(userEmail)
     }
 
-    fun getAllExpenditure(): Flow<Double>{
-        return transactionDao.getAllExpenditure()
+    fun getAllExpenditure(userEmail: String): Flow<Double>{
+        return transactionDao.getAllExpenditure(userEmail)
     }
 
     suspend fun insert(transaction: Transaction) : Long {
