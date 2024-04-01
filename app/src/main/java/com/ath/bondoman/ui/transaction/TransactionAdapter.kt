@@ -15,6 +15,7 @@ import com.ath.bondoman.databinding.TransactionListItemBinding
 import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.TransactionCategory
 import com.ath.bondoman.util.formatDate
+import com.ath.bondoman.util.NumberFormatUtils
 
 class TransactionListAdapter : RecyclerView.Adapter<TransactionListAdapter.TransactionViewHolder>() {
 
@@ -42,7 +43,7 @@ class TransactionListAdapter : RecyclerView.Adapter<TransactionListAdapter.Trans
         holder.date.text = formatDate(transaction.date)
         holder.category.text = transaction.category.toString()
         holder.title.text = transaction.title
-        holder.amount.text = transaction.amount.toString()
+        holder.amount.text = NumberFormatUtils.formatNumberString(transaction.amount.toString())
         holder.location.text = transaction.location?.address
 
         if (transaction.category == TransactionCategory.Expenditure) {

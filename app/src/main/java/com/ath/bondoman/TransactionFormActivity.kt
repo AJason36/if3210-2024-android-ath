@@ -20,10 +20,13 @@ import android.widget.Toast
 import com.ath.bondoman.viewmodel.TransactionViewModel
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import android.Manifest
+import androidx.core.app.ActivityCompat
 import com.ath.bondoman.model.LocationData
 import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.dto.InsertTransactionDTO
 import com.ath.bondoman.model.dto.UpdateTransactionDTO
+import com.ath.bondoman.util.NumberFormatUtils
 import com.ath.bondoman.util.isLocationPermissionGranted
 import com.ath.bondoman.util.showLocationPermissionDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,6 +79,7 @@ class TransactionFormActivity : AppCompatActivity() {
 
             // Location
             binding.transactionFormLocationField.text = transaction?.location?.address ?: "No location specified"
+            currentLocation = transaction?.location
         } else {
             // Hide date
             binding.transactionFormDateLabel.visibility = View.GONE
@@ -85,7 +89,7 @@ class TransactionFormActivity : AppCompatActivity() {
 
             // Check if Activity started by Broadcast Receiver
             if (intent.hasExtra(EXTRA_RANDOM_AMOUNT)) {
-                val randomAmount = intent.getLongExtra(EXTRA_RANDOM_AMOUNT, 0)
+                val randomAmount = intent.getDoubleExtra(EXTRA_RANDOM_AMOUNT, 0.0)
                 binding.transactionFormAmountField.setText(randomAmount.toString())
             }
 
@@ -116,6 +120,9 @@ class TransactionFormActivity : AppCompatActivity() {
             }
         })
 
+        val amountField = binding.transactionFormAmountField
+        NumberFormatUtils.formatNumberField(amountField)
+
         val locationButton = binding.transactionFormLocationButton
         locationButton.setOnClickListener{
             fetchLocation(true)
@@ -143,13 +150,8 @@ class TransactionFormActivity : AppCompatActivity() {
 
         val openGMapsButton = binding.transactionFormOpenInGmapsButton
         openGMapsButton.setOnClickListener {
-            val location = if (mode == MODE_ADD) {
-                currentLocation
-            } else {
-                transaction?.location
-            }
-            location?.let {
-                val gmmIntentUri = Uri.parse("geo:0,0?q=${it.latitude},${it.longitude}")
+            currentLocation?.let {
+                val gmmIntentUri = Uri.parse("geo:0,0?q=${it.latitude},${it.longitude}(${Uri.encode(it.address)})")
                 val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
                 mapIntent.setPackage("com.google.android.apps.maps")
                 if (mapIntent.resolveActivity(packageManager) != null) {
@@ -199,17 +201,28 @@ class TransactionFormActivity : AppCompatActivity() {
     private fun fetchLocation(askPermission: Boolean = false) {
         if (isLocationPermissionGranted(this)) {
             binding.transactionFormLocationField.text = "Retrieving Location…"
+            binding.transactionFormOpenInGmapsButton.visibility = View.VISIBLE
 
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             locationViewModel.fetchLocation(this, fusedLocationClient)
         } else {
             binding.transactionFormLocationField.text = "Location is disabled"
+            binding.transactionFormOpenInGmapsButton.visibility = View.GONE
 
             if (askPermission) {
-                showLocationPermissionDialog(this, packageName)
+                if (!(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION))) {
+                    showLocationPermissionDialog(this, packageName)
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION),
+                        PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+                    )
+                }
             }
         }
     }
+
 
     private fun saveTransaction() {
         val titleField = binding.transactionFormTitleField
@@ -230,11 +243,22 @@ class TransactionFormActivity : AppCompatActivity() {
             return
         }
 
+        val amountDouble = NumberFormatUtils.removeThousandsSeparator(amount).toDouble()
+
+        if (amountDouble == 0.0) {
+            amountField.error = "Amount cannot be 0"
+            return
+        }
+
+        if (currentLocation == null) {
+            currentLocation = LocationData()
+        }
+
         if (mode == MODE_ADD) {
             val transactionDTO = InsertTransactionDTO(
                 title = title,
                 category = category,
-                amount = amount.toDouble(),
+                amount = amountDouble,
                 location = currentLocation
             )
             transactionViewModel.insertTransaction(transactionDTO)
@@ -243,7 +267,7 @@ class TransactionFormActivity : AppCompatActivity() {
                 id = transaction!!.id,
                 title = title,
                 category = category,
-                amount = amount.toDouble(),
+                amount = amountDouble,
                 location = currentLocation,
                 date = transaction!!.date
             )

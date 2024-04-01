@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.icu.text.DecimalFormat
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -150,9 +151,10 @@ class SettingsFragment : Fragment() {
     }
 
     private fun randomizeTransaction() {
-        val MIN_RANDOM_VALUE = 100_000L
-        val MAX_RANDOM_VALUE = 10_000_000L
-        val randomAmount = Random.nextLong(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE)
+        val MIN_RANDOM_VALUE = 10.0
+        val MAX_RANDOM_VALUE = 1000.0
+        var randomAmount = Random.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE)
+        randomAmount = DecimalFormat("#.##").format(randomAmount).toDouble()
 
         val intent = Intent(context, TransactionFormBroadcastReceiver::class.java).apply {
             action = TransactionFormBroadcastReceiver.TRANSACTION_FORM_BROADCAST_RECEIVER
