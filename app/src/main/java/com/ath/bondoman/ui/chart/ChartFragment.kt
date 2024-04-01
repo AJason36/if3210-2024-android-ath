@@ -72,8 +72,6 @@ class ChartFragment : Fragment() {
             dIncome = income
             // Refresh the chart
             updateChartFragment(data,anyChartView,textView,pie,(dExpenditure.equals(0.0) && dIncome.equals(0.0)))
-            Log.d("INCOME", income.toString())
-            Log.d("INCOME", dIncome.equals(0.0).toString())
         }
         chartViewModel.allExpenditure.observe(viewLifecycleOwner) { expenditure ->
             Log.d("Expenditure", expenditure.toString())
@@ -81,8 +79,6 @@ class ChartFragment : Fragment() {
             data[1] = ValueDataEntry("Expenditure",expenditure)
             dExpenditure=expenditure
             updateChartFragment(data,anyChartView,textView,pie, (dExpenditure.equals(0.0) && dIncome.equals(0.0)))
-            Log.d("EXPENDITURE", expenditure.toString())
-            Log.d("EXPENDITURE", (dExpenditure.equals(0.0) && dIncome.equals(0.0)).toString())
         }
         anyChartView.setChart(pie)
         return root

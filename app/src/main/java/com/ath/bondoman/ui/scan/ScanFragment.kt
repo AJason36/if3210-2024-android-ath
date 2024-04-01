@@ -131,9 +131,6 @@ class ScanFragment : Fragment() {
             val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
             val body = MultipartBody.Part.createFormData("file", "file.jpg", requestFile)
             val token = tokenRepository.getToken()
-            Log.d("RequestBody", "File Name: ${file.name}")
-            Log.d("RequestBody", "Request File: $requestFile")
-            Log.d("RequestBody", "Token: ${token?.token}")
             if(token!=null) {
                 scanViewModel.upload(token.token,body, object : CoroutinesErrorHandler {
                     override fun onError(message: String) {
