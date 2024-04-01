@@ -59,6 +59,10 @@ class LoginActivity : AppCompatActivity() {
 
             if (email.isEmpty()) {
                 emailErrorTextView.visibility = View.VISIBLE
+                emailErrorTextView.setText("Email is required")
+            } else if (!isValidEmail(email)) {
+                emailErrorTextView.visibility = View.VISIBLE
+                emailErrorTextView.setText("Invalid email format")
             } else {
                 emailErrorTextView.visibility = View.GONE
             }
@@ -102,5 +106,10 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        val emailRegex = ("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}\$").toRegex()
+        return emailRegex.matches(email)
     }
 }
