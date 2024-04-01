@@ -132,14 +132,11 @@ class SettingsFragment : Fragment() {
     private fun sendEmail(transactions: List<Transaction>) {
         val excelFile = generateExcelAndSaveToCache(transactions, "xlsx", requireContext())
         if (excelFile != null) {
-            Log.d("DEBUG", excelFile.absolutePath)
-            Log.d("DEBUG", "getting excel uri")
             val excelUri = FileProvider.getUriForFile(
                 requireContext(),
                 "${requireContext().packageName}.fileprovider",
                 excelFile
             )
-            Log.d("DEBUG", "after attempt")
             val emailIntent = Intent(Intent.ACTION_SEND)
             emailIntent.type = "application/vnd.ms-excel"
             emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(tokenViewModel.token.value?.email))
