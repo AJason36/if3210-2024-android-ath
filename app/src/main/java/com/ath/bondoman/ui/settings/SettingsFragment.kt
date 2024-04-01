@@ -25,6 +25,7 @@ import com.ath.bondoman.databinding.FragmentSettingsBinding
 import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.receiver.TransactionFormBroadcastReceiver
 import com.ath.bondoman.repository.TransactionRepository
+import com.ath.bondoman.ui.scan.ScanFragment
 import com.ath.bondoman.viewmodel.TokenViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -277,7 +278,7 @@ class SettingsFragment : Fragment() {
 
             return path
         } catch (e: IOException) {
-            e.printStackTrace()
+            Log.e(SettingsFragment.TAG, "Error export to excel", e)
             return null
         }
     }
