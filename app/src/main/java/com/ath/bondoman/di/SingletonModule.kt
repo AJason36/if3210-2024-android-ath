@@ -2,6 +2,7 @@ package com.ath.bondoman.di
 
 import android.app.Application
 import android.content.Context
+import android.support.multidex.BuildConfig
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
@@ -29,6 +30,17 @@ class SingletonModule {
     @Provides
     fun provideTokenDataStore(@ApplicationContext context: Context): TokenDataStore = TokenDataStore(context)
 
+    @Singleton
+    @Provides
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor.Level.BODY // Log body in debug builds
+        } else {
+            HttpLoggingInterceptor.Level.NONE // Don't log in release builds
+        }
+        return loggingInterceptor
+    }
 
     @Singleton
     @Provides
@@ -44,9 +56,10 @@ class SingletonModule {
 
     @Singleton
     @Provides
-    fun provideRetrofitBuilder(): Retrofit.Builder =
+    fun provideRetrofitBuilder(okHttpClient: OkHttpClient): Retrofit.Builder =
         Retrofit.Builder()
             .baseUrl("https://pbd-backend-2024.vercel.app/api/")
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
 
     @Singleton
