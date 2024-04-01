@@ -73,7 +73,7 @@ class LoginActivity : AppCompatActivity() {
                 passwordErrorTextView.visibility = View.GONE
             }
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
+            if (email.isNotEmpty() && password.isNotEmpty() && isValidEmail(email)) {
                 authViewModel.login(payload, object : CoroutinesErrorHandler {
                     override fun onError(message: String) {
                         Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()

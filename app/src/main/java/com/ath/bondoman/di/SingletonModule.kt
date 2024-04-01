@@ -20,8 +20,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-val Context.datastore: DataStore<Preferences> by preferencesDataStore(name = "data_store")
-
 // put dependencies that are not tied to specific components here
 @Module
 @InstallIn(SingletonComponent::class)
