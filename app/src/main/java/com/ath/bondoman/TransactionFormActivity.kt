@@ -86,7 +86,7 @@ class TransactionFormActivity : AppCompatActivity() {
 
             // Check if Activity started by Broadcast Receiver
             if (intent.hasExtra(EXTRA_RANDOM_AMOUNT)) {
-                val randomAmount = intent.getLongExtra(EXTRA_RANDOM_AMOUNT, 0)
+                val randomAmount = intent.getDoubleExtra(EXTRA_RANDOM_AMOUNT, 0.0)
                 binding.transactionFormAmountField.setText(randomAmount.toString())
             }
 

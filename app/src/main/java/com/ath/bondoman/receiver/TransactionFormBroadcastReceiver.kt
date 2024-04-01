@@ -12,7 +12,7 @@ class TransactionFormBroadcastReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        val randomAmount = intent.getLongExtra(RECEIVE_RANDOM_AMOUNT, 0)
+        val randomAmount = intent.getDoubleExtra(RECEIVE_RANDOM_AMOUNT, 0.0)
         val transactionFormIntent = Intent(context, TransactionFormActivity::class.java).apply {
             putExtra(TransactionFormActivity.EXTRA_RANDOM_AMOUNT, randomAmount)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
