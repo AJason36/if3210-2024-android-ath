@@ -21,7 +21,6 @@
             android:background="?attr/colorPrimary"
             android:layout_marginEnd="2dp"
             android:id="@+id/category_rectangle"
-            android:orientation="horizontal"
             android:orientation="horizontal">
         </LinearLayout>
         <LinearLayout
