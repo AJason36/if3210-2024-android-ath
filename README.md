@@ -43,6 +43,42 @@ This page provides additional features:
 ## Bonus
 **OWASP**
 
+_M4: Insufficient Input/Output Validation_
+
+Insufficient input/output validation refers to the failure to properly validate and sanitize user inputs and outputs in an application.
+For mitigation, BondoMan validations are user inputs:
+1. On Login page, both email and password are validated.
+
+2. On Add Transaction page, all fields are validated.
+
+_M8: Security Misconfiguration_
+
+Security misconfiguration refers to the improper configuration of security settings, permissions, or access controls in an application or its underlying infrastructure. It occurs when default settings are not changed, unnecessary services are enabled, or sensitive information is exposed, leading to potential security breaches and unauthorized access.
+For mitigation, BondoMan:
+
+1. Only requests for necessary permissions <br/>
+![image](doc/permissions.png)
+- ACCESS_NETWORK_STATE for Network Sensing and HTTPS requests
+- INTERNET for Network Sensing and HTTPS requests
+- camera and CAMERA for camera ussage
+- ACCESS_FINE_LOCATION and ACCESS_COARSE_LOCATION for retrieving current location
+- READ_MEDIA_IMAGES and READ_MEDIA_VIDEO for uploading library READ_MEDIA_IMAGES
+- MANAGE_EXTERNAL_STORAGE and WRITE_EXTERNAL_STORAGE to store files on device's storage
+- READ_INTERNAL_STORAGE to access files on device's storage
+2. Only allows authenticated user to access the app's features and logs users out when JWT token expires.
+3. Ensure encrypted communication with server through HTTPS with Retrofit.
+4. Ensure each user can only access their own data and not other user's data
+_M9: Insecure Data Storage_
+
+Insecure data storage refers to the improper handling and storage of sensitive data in an application. It occurs when sensitive information is stored in plaintext, improperly encrypted, or stored in insecure locations, making it vulnerable to unauthorized access or disclosure.
+
+BondoMan mitigates this issue by:
+1. Uses EncryptedSharedPreferences to store JWT token because it can't be accessed by other apps and it is encrypted. <br/>
+![image](doc/shared_preferences.png)
+2. Uses RoomDB for secure data storing and access. <br/>
+![image](doc/database.png)
+3. Doesn't store sensitive data.
+
 ## Authors
 
 |            Nama            |   NIM    |
