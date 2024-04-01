@@ -24,6 +24,7 @@ import com.ath.bondoman.model.LocationData
 import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.dto.InsertTransactionDTO
 import com.ath.bondoman.model.dto.UpdateTransactionDTO
+import com.ath.bondoman.util.NumberFormatUtils
 import com.ath.bondoman.util.isLocationPermissionGranted
 import com.ath.bondoman.util.showLocationPermissionDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -116,6 +117,9 @@ class TransactionFormActivity : AppCompatActivity() {
                 binding.transactionFormLocationField.text = currentLocation?.address
             }
         })
+
+        val amountField = binding.transactionFormAmountField
+        NumberFormatUtils.formatNumberField(amountField)
 
         val locationButton = binding.transactionFormLocationButton
         locationButton.setOnClickListener{
@@ -226,11 +230,13 @@ class TransactionFormActivity : AppCompatActivity() {
             return
         }
 
+        val amountDouble = NumberFormatUtils.removeThousandsSeparator(amount).toDouble()
+
         if (mode == MODE_ADD) {
             val transactionDTO = InsertTransactionDTO(
                 title = title,
                 category = category,
-                amount = amount.toDouble(),
+                amount = amountDouble,
                 location = currentLocation
             )
             transactionViewModel.insertTransaction(transactionDTO)
@@ -239,7 +245,7 @@ class TransactionFormActivity : AppCompatActivity() {
                 id = transaction!!.id,
                 title = title,
                 category = category,
-                amount = amount.toDouble(),
+                amount = amountDouble,
                 location = currentLocation,
                 date = transaction!!.date
             )
