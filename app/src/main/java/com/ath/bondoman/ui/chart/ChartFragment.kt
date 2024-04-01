@@ -47,9 +47,13 @@ class ChartFragment : Fragment() {
             ValueDataEntry("Income", 0.0),
             ValueDataEntry("Expenditure", 0.0)
         )
+        var dIncome:Double = 0.0
+        var dExpenditure:Double=0.0
+
         val pie = AnyChart.pie()
 
         pie.labels().position("outside")
+        pie.palette(arrayOf("#b0df86", "#f26a6a"))
 
         pie.legend().title().enabled(true)
         pie.legend().title()
@@ -65,21 +69,27 @@ class ChartFragment : Fragment() {
         chartViewModel.allIncome.observe(viewLifecycleOwner) { income ->
             // Update Income entry
             data[0] = ValueDataEntry("Income", income)
+            dIncome = income
             // Refresh the chart
-            updateChartFragment(data,anyChartView,textView,pie)
+            updateChartFragment(data,anyChartView,textView,pie,(dExpenditure.equals(0.0) && dIncome.equals(0.0)))
+            Log.d("INCOME", income.toString())
+            Log.d("INCOME", dIncome.equals(0.0).toString())
         }
         chartViewModel.allExpenditure.observe(viewLifecycleOwner) { expenditure ->
             Log.d("Expenditure", expenditure.toString())
             // Update Expenditure entry
             data[1] = ValueDataEntry("Expenditure",expenditure)
-            updateChartFragment(data,anyChartView,textView,pie)
+            dExpenditure=expenditure
+            updateChartFragment(data,anyChartView,textView,pie, (dExpenditure.equals(0.0) && dIncome.equals(0.0)))
+            Log.d("EXPENDITURE", expenditure.toString())
+            Log.d("EXPENDITURE", (dExpenditure.equals(0.0) && dIncome.equals(0.0)).toString())
         }
         anyChartView.setChart(pie)
         return root
     }
 
-    fun updateChartFragment(data:MutableList<DataEntry>, anyChartView:AnyChartView,textView:TextView, pie: Pie) {
-        if (data.isEmpty() || isChartDataZero(data)) {
+    private fun updateChartFragment(data:MutableList<DataEntry>, anyChartView:AnyChartView, textView:TextView, pie: Pie, isChartDataZero:Boolean) {
+        if (data.isEmpty() || isChartDataZero) {
             // Pie chart is empty, update the TextView
             anyChartView.visibility = View.GONE
             textView.visibility = View.VISIBLE
@@ -91,25 +101,6 @@ class ChartFragment : Fragment() {
         }
     }
 
-    // TODO: check zero in valuedataentry
-    fun isChartDataZero(data:MutableList<DataEntry>): Boolean {
-        if (data.size>1) {
-            val incomeEntry = data[0]
-            val expenditureEntry = data[1]
-            var isIncomeZero=false
-            var isExpenditureZero = false
-
-            isIncomeZero = incomeEntry.getValue("value").equals(0.0)
-            isExpenditureZero=expenditureEntry.getValue("value").equals(0.0)
-
-
-            Log.d("IsIncomeZero",incomeEntry.getValue("value").toString())
-            Log.d("IsExpenditureZero",incomeEntry.getValue("value").toString())
-            return isIncomeZero && isExpenditureZero
-        }else{
-            return true;
-        }
-    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
