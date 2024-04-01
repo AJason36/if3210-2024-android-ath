@@ -45,4 +45,7 @@
     <string name="welcome_back_title">Welcome Back</string>
     <string name="export_as_excel_xslx_text">Export as Excel (.xslx)</string>
     <string name="export_as_excel_xls_text">Export as Excel (.xls)</string>
+    <string name="transaction_title_text">Title</string>
+    <string name="account_icon_content_desc">Account Icon</string>
+    <string name="account_placeholder">EMAIL</string>
 </resources>

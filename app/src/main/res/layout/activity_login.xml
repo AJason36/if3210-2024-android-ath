@@ -47,7 +47,7 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/email_label"
                 android:textStyle="bold"
-                android:textSize="@dimen/text_size_xs"/>
+                android:textSize="@dimen/text_size_sm"/>
 
             <EditText
                 android:id="@+id/email_edit_text"

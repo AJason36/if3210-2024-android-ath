@@ -72,6 +72,7 @@ class SettingsFragment : Fragment() {
             requireActivity().stopService(serviceIntent)
         }
 
+
         tokenViewModel.token.observe(viewLifecycleOwner) { token ->
             token?.let {
                 binding.emailText.text = token.email

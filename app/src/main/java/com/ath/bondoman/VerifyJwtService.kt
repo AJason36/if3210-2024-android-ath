@@ -28,6 +28,7 @@ class VerifyJwtService: Service() {
     private lateinit var handler: Handler
     private lateinit var runnable: Runnable
     private lateinit var job: Job
+    private val tag = "BACKGROUND SERVICE"
 
     override fun onCreate() {
         super.onCreate()
@@ -40,7 +41,7 @@ class VerifyJwtService: Service() {
     }
 
     private fun verifyJwt() {
-        Log.d("[BACKGROUND SERVICE]", "Starting check token request")
+        Log.d(this.tag, "Starting check token request")
         val isConnected = isNetworkAvailable(this)
         if (isConnected) {
             CoroutineScope(Dispatchers.IO + job).launch {

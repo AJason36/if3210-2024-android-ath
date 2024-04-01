@@ -1,13 +1,20 @@
 package com.ath.bondoman.ui.transaction
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.ath.bondoman.R
 import com.ath.bondoman.TransactionFormActivity
 import com.ath.bondoman.databinding.TransactionListItemBinding
 import com.ath.bondoman.model.Transaction
+import com.ath.bondoman.model.TransactionCategory
+import com.ath.bondoman.util.formatDate
 import com.ath.bondoman.util.NumberFormatUtils
 
 class TransactionListAdapter : RecyclerView.Adapter<TransactionListAdapter.TransactionViewHolder>() {
@@ -20,6 +27,8 @@ class TransactionListAdapter : RecyclerView.Adapter<TransactionListAdapter.Trans
         val title: TextView = binding.title
         val amount: TextView = binding.amount
         val location: TextView = binding.location
+        val categoryCircle: View = binding.categoryCircle
+        val categoryRectangle: LinearLayout = binding.categoryRectangle
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
@@ -30,11 +39,20 @@ class TransactionListAdapter : RecyclerView.Adapter<TransactionListAdapter.Trans
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
         val transaction = transactions[position]
-        holder.date.text = transaction.date
+        val context = holder.itemView.context
+        holder.date.text = formatDate(transaction.date)
         holder.category.text = transaction.category.toString()
         holder.title.text = transaction.title
         holder.amount.text = NumberFormatUtils.formatNumberString(transaction.amount.toString())
         holder.location.text = transaction.location?.address
+
+        if (transaction.category == TransactionCategory.Expenditure) {
+            holder.categoryCircle.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.rose_400))
+            holder.categoryRectangle.setBackgroundColor(ContextCompat.getColor(context, R.color.rose_400))
+        } else {
+            holder.categoryCircle.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.green_400))
+            holder.categoryRectangle.setBackgroundColor(ContextCompat.getColor(context, R.color.green_400))
+        }
 
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
