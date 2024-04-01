@@ -58,12 +58,11 @@ class ScanViewModel @Inject constructor(
         }
     }
 
-    fun createTransactionFromItems(items: List<Item>): Transaction {
+    fun createTransactionFromItems(items: List<Item>, location: LocationData): Transaction {
         val totalAmount = items.sumOf { it.qty * it.price }
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = dateFormat.format(Date())
         val transactionName = "Transaction_$currentDate"
-        val location = LocationData()
 
         return Transaction(
             title = transactionName,

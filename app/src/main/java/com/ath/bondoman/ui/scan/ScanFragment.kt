@@ -26,6 +26,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,13 +34,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ath.bondoman.R
 import com.ath.bondoman.api.UploadClient
 import com.ath.bondoman.databinding.FragmentScanBinding
+import com.ath.bondoman.model.LocationData
 import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.dto.ApiResponse
 import com.ath.bondoman.repository.TokenRepository
 import com.ath.bondoman.repository.TransactionRepository
 import com.ath.bondoman.util.isNetworkAvailable
 import com.ath.bondoman.viewmodel.CoroutinesErrorHandler
+import com.ath.bondoman.viewmodel.LocationViewModel
 import com.ath.bondoman.viewmodel.ScanViewModel
+import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -63,6 +67,7 @@ class ScanFragment : Fragment() {
     private var _binding: FragmentScanBinding? = null
     private val binding get() = _binding!!
     private val scanViewModel :ScanViewModel by viewModels()
+    private val locationViewModel: LocationViewModel by viewModels()
 
     @Inject lateinit var transactionRepository:TransactionRepository
     private lateinit var transaction:Transaction
@@ -71,7 +76,7 @@ class ScanFragment : Fragment() {
     private lateinit var cameraExecutor: ExecutorService
     private var lensFacing = CameraSelector.LENS_FACING_BACK
     private lateinit var cameraSelector: CameraSelector
-
+    private var currentLocation: LocationData = LocationData()
 
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
@@ -122,6 +127,15 @@ class ScanFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = FragmentScanBinding.inflate(layoutInflater)
+
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        locationViewModel.fetchLocation(requireContext(), fusedLocationClient)
+
+        locationViewModel.location.observe(viewLifecycleOwner, Observer { newLocation ->
+            if (newLocation != null) {
+                currentLocation = newLocation
+            }
+        })
     }
 
     private fun uploadBill(file: File){
@@ -353,7 +367,7 @@ class ScanFragment : Fragment() {
                 is ApiResponse.Success -> {
                     val itemsList = response.data.items.items
                     adapter.setItems(itemsList)
-                    transaction = scanViewModel.createTransactionFromItems(itemsList)
+                    transaction = scanViewModel.createTransactionFromItems(itemsList, currentLocation)
                     switchView(false)
                     Toast.makeText(requireContext(),"Scan complete",Toast.LENGTH_SHORT).show()
                 }
