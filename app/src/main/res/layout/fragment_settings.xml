@@ -10,15 +10,17 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/colorSecondary">
 
 
         <LinearLayout
-            android:layout_width="412dp"
+            android:layout_width="match_parent"
             android:layout_height="143dp"
             android:background="@drawable/bg_app_bar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:paddingTop="40dp"
             android:paddingStart="30dp"
             android:outlineProvider="none"
@@ -41,18 +43,38 @@
             android:background="?attr/colorSecondary"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="100dp"
-            android:layout_marginHorizontal="32dp"
+            android:layout_marginHorizontal="20dp"
             app:cardCornerRadius="@dimen/corner_md"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-            <TextView
-                android:id="@+id/email_text"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:textSize="@dimen/text_size_md"
-                tools:layout_editor_absoluteX="12dp"
-                tools:layout_editor_absoluteY="167dp" />
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                tools:ignore="UseCompoundDrawables"
+                android:padding="20dp">
+                <!-- ImageView -->
+                <ImageView
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@string/account_icon_content_desc"
+                    android:src="@drawable/ic_account_circle"
+                    android:background="@drawable/circular_background"
+                    app:tint="?attr/colorSecondary"
+                    android:padding="10dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- TextView -->
+                <TextView
+                    android:id="@+id/email_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_md"
+                    android:textAlignment="center"
+                    android:text="@string/account_placeholder"/>
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -62,7 +84,7 @@
             android:background="?attr/colorSecondary"
             app:layout_constraintTop_toBottomOf="@+id/email_card"
             android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="32dp"
+            android:layout_marginHorizontal="20dp"
             app:cardCornerRadius="@dimen/corner_md"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -77,8 +99,9 @@
                     style="@style/Button.Ghost"
                     android:text="@string/send_transactions_option"
                     android:textAlignment="viewStart"
-                    android:drawableStart="@drawable/ic_outgoing_mail"
-                    android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/send_with_bg"
+                    android:drawablePadding="12dp"
+                    android:padding="12dp"
                     />
 
                 <android.widget.Button
@@ -86,10 +109,11 @@
                     style="@style/Button.Ghost"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/ic_random"
-                    android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/random_with_bg"
                     android:text="@string/randomize_transaction_option"
-                    android:textAlignment="viewStart" />
+                    android:textAlignment="viewStart"
+                    android:drawablePadding="12dp"
+                    android:padding="12dp"/>
 
                 <android.widget.Button
                     android:id="@+id/xlsx_export_button"
@@ -98,8 +122,9 @@
                     style="@style/Button.Ghost"
                     android:text="@string/export_as_excel_xslx_text"
                     android:textAlignment="viewStart"
-                    android:drawableStart="@drawable/ic_download"
-                    android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/export_with_bg"
+                    android:drawablePadding="12dp"
+                    android:padding="12dp"
                     />
                 <android.widget.Button
                     android:id="@+id/xls_export_button"
@@ -108,8 +133,9 @@
                     style="@style/Button.Ghost"
                     android:text="@string/export_as_excel_xls_text"
                     android:textAlignment="viewStart"
-                    android:drawableStart="@drawable/ic_download"
-                    android:drawablePadding="6dp"
+                    android:drawableStart="@drawable/download_with_bg"
+                    android:drawablePadding="12dp"
+                    android:padding="12dp"
                     />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
