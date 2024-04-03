@@ -62,6 +62,7 @@ Insufficient input/output validation refers to the failure to properly validate 
 For mitigation, BondoMan validations are user inputs:
 
 1. On Login page, both email and password are validated.
+![image](doc/login.jpg)
 
 2. On Add Transaction page, all fields are validated.
 
