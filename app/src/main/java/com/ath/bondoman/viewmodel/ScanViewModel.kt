@@ -4,17 +4,23 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.ath.bondoman.api.UploadClient
 import com.ath.bondoman.model.LocationData
 import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.TransactionCategory
 import com.ath.bondoman.model.dto.ApiResponse
+import com.ath.bondoman.model.dto.InsertTransactionDTO
 import com.ath.bondoman.model.dto.Item
 import com.ath.bondoman.model.dto.UploadResponse
 import com.ath.bondoman.repository.TokenRepository
+import com.ath.bondoman.repository.TransactionRepository
 import com.ath.bondoman.util.apiRequestFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MultipartBody
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -24,13 +30,17 @@ import javax.inject.Inject
 @HiltViewModel
 class ScanViewModel @Inject constructor(
     private val uploadClient: UploadClient,
-    private val tokenRepository: TokenRepository
+    private val tokenRepository: TokenRepository,
+    private val repository: TransactionRepository
 ): BaseViewModel() {
     private val _imageBitmap = MutableLiveData<Bitmap>()
     val imageBitmap: LiveData<Bitmap> = _imageBitmap
 
     private val _uploadResponse= MutableLiveData<ApiResponse<UploadResponse>>()
     val uploadResponse = _uploadResponse
+
+    private val _insertResult = MutableLiveData<Long>()
+    val insertResult: LiveData<Long> = _insertResult
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is scanner Fragment"
@@ -58,20 +68,38 @@ class ScanViewModel @Inject constructor(
         }
     }
 
-    fun createTransactionFromItems(items: List<Item>): Transaction {
+    fun createTransactionFromItems(items: List<Item>, location: LocationData): InsertTransactionDTO {
         val totalAmount = items.sumOf { it.qty * it.price }
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
         val currentDate = dateFormat.format(Date())
-        val transactionName = "Transaction_$currentDate"
-        val location = LocationData()
+        val transactionName = "Scan_$currentDate"
 
-        return Transaction(
+        return InsertTransactionDTO(
             title = transactionName,
             amount = totalAmount,
             location = location,
-            category = TransactionCategory.Expenditure,
-            date = currentDate.split("_")[0],
-            userEmail = tokenRepository.getToken()?.email ?: ""
+            category = TransactionCategory.Expenditure
         )
+    }
+
+    fun insertTransaction(transactionDTO: InsertTransactionDTO) {
+        viewModelScope.launch {
+            val transaction = Transaction(
+                title = transactionDTO.title,
+                category = transactionDTO.category,
+                amount = transactionDTO.amount,
+                location = transactionDTO.location,
+                userEmail = tokenRepository.getToken()?.email ?: ""
+            )
+            try {
+                val rowId = withContext(Dispatchers.IO) {
+                    repository.insert(transaction)
+                }
+                _insertResult.value = rowId
+            } catch (e: Exception) {
+                _insertResult.value = -1L
+            }
+
+        }
     }
 }
