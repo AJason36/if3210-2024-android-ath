@@ -18,6 +18,7 @@ import com.ath.bondoman.viewmodel.CoroutinesErrorHandler
 import com.ath.bondoman.viewmodel.TokenViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
@@ -76,7 +77,11 @@ class LoginActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty() && isValidEmail(email)) {
                 authViewModel.login(payload, object : CoroutinesErrorHandler {
                     override fun onError(message: String) {
-                        Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                        if (message.lowercase(Locale.getDefault()).contains("unable to resolve host")) {
+                            Toast.makeText(applicationContext, "Device not connected to the internet", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 })
             }
@@ -87,7 +92,6 @@ class LoginActivity : AppCompatActivity() {
                 is ApiResponse.Failure -> {
                     val errorMessage = when {
                         response.code == 400 || response.code == 401 -> "Invalid username or password"
-                        response.message.contains("Unable to resolve host") -> "Device not connected to the internet"
                         else -> response.message
                     }
                     loginErrorText.text = errorMessage
