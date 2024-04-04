@@ -52,7 +52,21 @@ This page provides additional features:
 - Randomize transaction (Broadcast Receiver)
 - Accessibility Testing
 
+**13521100**
+
+- Scan & Upload Transaction (Scan Fragment)
+- Add Scanned Item to Transaction List
+- Chart Transaction (Chart Fragment)
+- Export to xls and xlsx (Settings Fragment)
+- Twibbon
+
 ## Bonus
+
+### Twibbon
+Here is how to use Twibbon feature in BondoMan:
+1. Open the app and go to Twibbon menu
+2. Choose the twibbon you want to use
+3. Take a picture with the twibbon
 
 ### OWASP
 
