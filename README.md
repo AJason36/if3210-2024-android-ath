@@ -28,6 +28,9 @@ This page provides additional features:
 - Export transactions to .xlsx
 - Export transsactions to .xls
 
+**5. Twibbon**
+This page is to create a twibbon for user's photo.
+
 ## Requirements
 
 1. Android with minimum API SDK Level 29

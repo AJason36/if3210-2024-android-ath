@@ -1,6 +1,5 @@
 package com.ath.bondoman.ui.scan
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -24,7 +23,6 @@ class ItemListAdapter : RecyclerView.Adapter<ItemListAdapter.ItemViewHolder>() {
         return ItemViewHolder(binding)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = items[position]
         holder.title.text = item.name
