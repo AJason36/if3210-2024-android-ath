@@ -1,7 +1,6 @@
 package com.ath.bondoman.ui.scan
 
 import android.Manifest
-import android.content.ContentValues
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -9,12 +8,10 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
@@ -80,10 +77,7 @@ class ScanFragment : Fragment() {
 
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
-            val imageView: ImageView = binding.capturedImage
-//            imageView.setImageURI(uri)
             uploadBill(uriToFile(uri,requireContext()))
-            // Update the ViewModel
         }
     }
 
@@ -149,26 +143,12 @@ class ScanFragment : Fragment() {
         }
     }
 
-    private suspend fun saveBill(){
-        scanViewModel.insertTransaction(transactionDTO);
+    private fun saveBill(){
+        scanViewModel.insertTransaction(transactionDTO)
     }
 
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
-
-        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.US)
-            .format(System.currentTimeMillis())
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
-        }
-
-        // output: file + metadata
-        val outputOptions = ImageCapture.OutputFileOptions
-            .Builder(requireContext().contentResolver,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                contentValues)
-            .build()
 
         // Set up image capture listener
         imageCapture.takePicture(
@@ -256,7 +236,7 @@ class ScanFragment : Fragment() {
             // Handle Permission granted/rejected
             var permissionGranted = true
             permissions.entries.forEach {
-                if (it.key in REQUIRED_PERMISSIONS && it.value == false)
+                if (it.key in REQUIRED_PERMISSIONS && !it.value)
                     permissionGranted = false
             }
             if (!permissionGranted) {
@@ -362,7 +342,7 @@ class ScanFragment : Fragment() {
                         response.message.contains("Unable to resolve host") -> "Device not connected to the internet"
                         else -> response.message
                     }
-                    Toast.makeText(requireContext(),"Failed get Data: ${response.code}, ${response.message}",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),"Failed get Data: $errorMessage",Toast.LENGTH_SHORT).show()
                 }
 
                 is ApiResponse.Success -> {
@@ -379,11 +359,6 @@ class ScanFragment : Fragment() {
         }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
-
-        val imageView: ImageView= binding.capturedImage
-        scanViewModel.imageBitmap.observe(viewLifecycleOwner){
-            imageView.setImageBitmap(it)
-        }
 
         return root
     }
@@ -418,7 +393,6 @@ class ScanFragment : Fragment() {
 
     companion object {
         private const val TAG = "CameraXApp"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private val REQUIRED_PERMISSIONS =
             mutableListOf (
                 Manifest.permission.CAMERA,
