@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.twibbon.TwibbonFragment">
+
+    <LinearLayout
+        android:id="@+id/header_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_app_bar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingTop="40dp"
+        android:paddingBottom="20dp"
+        android:paddingStart="30dp"
+        android:outlineProvider="none"
+        tools:ignore="RtlSymmetry">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_twibbon"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:contentDescription="@string/title_twibbon"/>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/imageContainer"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
+        android:layout_margin="20dp"
+        app:layout_constraintTop_toBottomOf="@id/header_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <ImageView
+            android:id="@+id/capturedImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            android:contentDescription="@string/display_image" />
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/twibbonImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/twibbon1"
+        android:scaleType="centerInside" />
+</FrameLayout>
+
+    <ImageButton
+        android:id="@+id/image_capture_button"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginBottom="50dp"
+        android:elevation="2dp"
+        android:contentDescription="@string/take_photo"
+        android:scaleType="centerCrop"
+        app:tint="?attr/colorPrimaryVariant"
+        android:background="?attr/selectableItemBackground"
+        android:src="@drawable/ic_capture"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageContainer"/>
+
+    <ImageButton
+        android:id="@+id/switch_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_switch"
+        android:background="?attr/selectableItemBackground"
+        android:scaleType="centerCrop"
+        app:tint="?attr/colorPrimaryVariant"
+        app:layout_constraintBottom_toTopOf="@id/image_capture_button"
+        app:layout_constraintTop_toBottomOf="@id/image_capture_button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/image_capture_button"
+        android:contentDescription="@string/switch_camera" />
+
+    <ImageButton
+        android:id="@+id/gallery_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_gallery"
+        android:background="?attr/selectableItemBackground"
+        android:scaleType="centerCrop"
+        app:tint="?attr/colorPrimaryVariant"
+        app:layout_constraintBottom_toTopOf="@id/image_capture_button"
+        app:layout_constraintTop_toBottomOf="@id/image_capture_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/image_capture_button"
+        android:contentDescription="@string/gallery_photo" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/vertical_centerline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".50" />
+
+    <Button
+        android:id="@+id/retake_button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:layout_marginHorizontal="8dp"
+        android:text="@string/retake_image"
+        android:textStyle="bold"
+        android:background="@drawable/bg_primary_button"
+        app:layout_constraintTop_toBottomOf="@id/imageContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:visibility="gone"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,4 +32,10 @@
         android:name="com.ath.bondoman.ui.settings.SettingsFragment"
         android:label="@string/title_settings"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/navigation_twibbon"
+        android:name="com.ath.bondoman.ui.twibbon.TwibbonFragment"
+        android:label="@string/title_twibbon"
+        tools:layout="@layout/fragment_twibbon" />
 </navigation>

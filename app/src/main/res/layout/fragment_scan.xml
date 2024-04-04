@@ -63,14 +63,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent=".50" />
 
-    <!--Display Image-->
-    <ImageView
-        android:id="@+id/capturedImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:contentDescription="display image" />
-
     <LinearLayout
         android:id="@+id/heading"
         android:layout_width="match_parent"

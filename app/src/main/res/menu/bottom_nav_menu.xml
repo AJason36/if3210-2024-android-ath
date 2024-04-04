@@ -18,8 +18,12 @@
         android:title="@string/title_chart" />
 
     <item
+        android:id="@+id/navigation_twibbon"
+        android:icon="@drawable/ic_camera"
+        android:title="@string/title_twibbon" />
+
+    <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings"
         android:title="@string/title_settings" />
-
 </menu>
