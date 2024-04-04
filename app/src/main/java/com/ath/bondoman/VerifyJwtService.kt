@@ -51,7 +51,7 @@ class VerifyJwtService: Service() {
                 }
             }
         } else {
-            handler.postDelayed(runnable, 2 * 60 * 1000)
+            handler.postDelayed(runnable, 30 * 1000)
         }
     }
 
