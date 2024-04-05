@@ -1,6 +1,6 @@
 # BondoMan
 
-BondoMan is an **Android Based Application** for _money management_ built using Kotlin, RoomDB, and Hilt Dependency Injection. This application is built to fulfill Tugas Besar Android for Platform Based Development IF3210 2023/2024. This app's minimum SDK version is Android API Level 29, with compile target Android API Level 34.
+BondoMan is an **Android Based Application** for _money management_ built using Kotlin, RoomDB, CameraX, AnyChart and Hilt Dependency Injection. This application is built to fulfill Tugas Besar Android for Platform Based Development IF3210 2023/2024. This app's minimum SDK version is Android API Level 29, with compile target Android API Level 34.
 
 ## Features
 

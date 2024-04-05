@@ -47,7 +47,10 @@ class ChartFragment : Fragment() {
 
         val pie = AnyChart.pie()
 
-        pie.labels().position("outside")
+        pie.labels().position("inside")
+        pie.labels().fontWeight(500)
+        pie.labels().fontSize(18);
+        pie.labels().fontWeight(900);
         pie.palette(arrayOf("#b0df86", "#f26a6a"))
 
         pie.legend().title().enabled(true)
