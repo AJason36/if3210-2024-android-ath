@@ -67,7 +67,7 @@ This page is to create a twibbon for user's photo.
 
 ## Pembagian Tugas
 
-**13521044**
+**13521044 (40hrs)**
 
 - Setup repository and project
 - Login page
@@ -76,14 +76,14 @@ This page is to create a twibbon for user's photo.
 - Network Sensing
 - OWASP
 
-**13521046**
+**13521046 (40hrs)**
 
 - Create, update, delete transaction (TransactionFromActivity)
 - Transactions list (TransactionFragment)
 - Randomize transaction (Broadcast Receiver)
 - Accessibility Testing
 
-**13521100**
+**13521100 (40hrs)**
 
 - Scan & Upload Transaction (Scan Fragment)
 - Add Scanned Item to Transaction List
