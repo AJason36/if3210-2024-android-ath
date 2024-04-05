@@ -1,23 +1,39 @@
 package com.ath.bondoman.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.ath.bondoman.api.UploadClient
+import com.ath.bondoman.model.LocationData
 import com.ath.bondoman.model.Transaction
+import com.ath.bondoman.model.TransactionCategory
+import com.ath.bondoman.model.dto.ApiResponse
 import com.ath.bondoman.model.dto.InsertTransactionDTO
+import com.ath.bondoman.model.dto.Item
 import com.ath.bondoman.model.dto.UpdateTransactionDTO
+import com.ath.bondoman.model.dto.UploadResponse
 import com.ath.bondoman.repository.TokenRepository
 import com.ath.bondoman.repository.TransactionRepository
+import com.ath.bondoman.util.apiRequestFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
-class TransactionViewModel @Inject constructor(private val repository: TransactionRepository, private val tokenRepository: TokenRepository) : ViewModel() {
+class TransactionViewModel @Inject constructor(
+    private val uploadClient: UploadClient,
+    private val repository: TransactionRepository,
+    private val tokenRepository: TokenRepository)
+    : BaseViewModel() {
     private val userEmail = tokenRepository.getToken()?.email ?: ""
 
     private val _text = MutableLiveData<String>().apply {
@@ -34,6 +50,8 @@ class TransactionViewModel @Inject constructor(private val repository: Transacti
     private val _deleteResult = MutableLiveData<Int>()
     val deleteResult: LiveData<Int> = _deleteResult
 
+    private val _uploadResponse= MutableLiveData<ApiResponse<UploadResponse>>()
+    val uploadResponse = _uploadResponse
     fun insertTransaction(transactionDTO: InsertTransactionDTO) {
         viewModelScope.launch {
             val transaction = Transaction(
@@ -80,5 +98,35 @@ class TransactionViewModel @Inject constructor(private val repository: Transacti
             }
             _deleteResult.value = rowId
         }
+    }
+    fun upload(token:String, payload: MultipartBody.Part, coroutinesErrorHandler: CoroutinesErrorHandler) = baseRequest(
+        uploadResponse,
+        coroutinesErrorHandler
+    ){
+
+        apiRequestFlow { uploadClient.upload("Bearer $token", payload) }.onCompletion {
+            // Log the response after the network call is completed
+                cause ->
+            // Log the response after the network call is completed
+            if (cause != null) {
+                Log.e("NetworkError", "Error message: ${cause.message}")
+            } else {
+                Log.d("NetworkResponse", "Response Code: ${_uploadResponse}")
+            }
+
+        }
+    }
+    fun createTransactionFromItems(items: List<Item>, location: LocationData): InsertTransactionDTO {
+        val totalAmount = items.sumOf { it.qty * it.price }
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val currentDate = dateFormat.format(Date())
+        val transactionName = "Scan_$currentDate"
+
+        return InsertTransactionDTO(
+            title = transactionName,
+            amount = totalAmount,
+            location = location,
+            category = TransactionCategory.Expenditure
+        )
     }
 }
