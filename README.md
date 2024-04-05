@@ -6,19 +6,40 @@ BondoMan is an **Android Based Application** for _money management_ built using 
 
 This app has a Login page to verify that only authenticated user can use the app.
 
+<img src="doc/login_page.jpg" height="400">
+
 This app is divided into 4 navigations:
+
 **1. Transaction**
 This page is for managing transactions. User can:
 
 - See transaction list
+
+  <img src="doc/transaction_list.jpg" height="400">
+
 - Add new transaction with information including transaction name, amount, current location, and category (income/expenditure)
-- Edit and delete transsaction
+
+  <img src="doc/add_transaction.jpg" height="400">
+
+- Edit and delete transaction
+
+  <img src="doc/edit_transaction.jpg" height="400">
 
 **2. Scan**
 This page is for scanning a bill. The bill is scanned from phone's camera and then the picture will be sent to a backend server to get the scan result. The scan result will be shown and the transaction will be added to transaction list.
 
+- Scan bill
+
+  <img src="doc/scan_bill.jpg" height="400">
+
+- Scanned bill
+
+  <img src="doc/scanned_bill.jpg" height="400">
+
 **3. Graph**
 This page is to visualize the proportion between expenditures and income.
+
+<img src="doc/chart.jpg" height="400">
 
 **4. Settings**
 This page provides additional features:
@@ -28,8 +49,15 @@ This page provides additional features:
 - Export transactions to .xlsx
 - Export transsactions to .xls
 
+<img src="doc/settings.jpg" height="400">
+
 **5. Twibbon**
 This page is to create a twibbon for user's photo.
+
+<p float="left">
+  <img src="doc/twibbon_1.jpg" height="400">
+  <img src="doc/twibbon_2.jpg" height="400"> 
+</p>
 
 ## Requirements
 
@@ -66,7 +94,9 @@ This page is to create a twibbon for user's photo.
 ## Bonus
 
 ### Twibbon
+
 Here is how to use Twibbon feature in BondoMan:
+
 1. Open the app and go to Twibbon menu
 2. Choose the twibbon you want to use
 3. Take a picture with the twibbon
@@ -79,7 +109,8 @@ Insufficient input/output validation refers to the failure to properly validate 
 For mitigation, BondoMan validations are user inputs:
 
 1. On Login page, both email and password are validated.
-![image](doc/login.jpg)
+
+   <img src="doc/login.jpg" height="400">
 
 2. On Add Transaction page, all fields are validated.
 
@@ -120,7 +151,7 @@ BondoMan mitigates this issue by:
 
 #### Before
 
-![image](doc/accessibility_testing_transaction_before.jpg)
+<img src="doc/accessibility_testing_transaction_before.jpg" height="400">
 
 #### Changes
 
@@ -130,14 +161,18 @@ BondoMan mitigates this issue by:
 
 #### After
 
-![image](doc/accessibility_testing_transaction_after.jpg)
+<img src="doc/accessibility_testing_transaction_after.jpg" height="400">
+
+<br/>
 
 **Settings Fragment**
 
 #### Before
 
-![image](doc/accessibility_testing_settings_before_1.jpg)
-![image](doc/accessibility_testing_settings_before_2.jpg)
+<p float="left">
+  <img src="doc/accessibility_testing_settings_before_1.jpg" height="400">
+  <img src="doc/accessibility_testing_settings_before_2.jpg" height="400"> 
+</p>
 
 #### Changes
 
@@ -148,8 +183,10 @@ BondoMan mitigates this issue by:
 
 #### After
 
-![image](doc/accessibility_testing_settings_after_1.jpg)
-![image](doc/accessibility_testing_settings_after_2.jpg)
+<p float="left">
+  <img src="doc/accessibility_testing_settings_after_1.jpg" height="400">
+  <img src="doc/accessibility_testing_settings_after_2.jpg" height="400"> 
+</p>
 
 ## Authors
 
