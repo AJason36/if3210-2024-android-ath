@@ -3,10 +3,8 @@ package com.ath.bondoman
 import android.R
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
@@ -27,6 +25,7 @@ import com.ath.bondoman.model.Transaction
 import com.ath.bondoman.model.dto.InsertTransactionDTO
 import com.ath.bondoman.model.dto.UpdateTransactionDTO
 import com.ath.bondoman.util.NumberFormatUtils
+import com.ath.bondoman.util.isLocationEnabled
 import com.ath.bondoman.util.isLocationPermissionGranted
 import com.ath.bondoman.util.showLocationPermissionDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -208,14 +207,17 @@ class TransactionFormActivity : AppCompatActivity() {
     }
 
     private fun fetchLocation(askPermission: Boolean = false) {
-        if (isLocationPermissionGranted(this)) {
+        if (!isLocationEnabled(this)) {
+            binding.transactionFormLocationField.text = "Location service is disabled. Please turn on device location service."
+            binding.transactionFormOpenInGmapsButton.visibility = View.GONE
+        } else if (isLocationPermissionGranted(this)) {
             binding.transactionFormLocationField.text = "Retrieving Location…"
             binding.transactionFormOpenInGmapsButton.visibility = View.VISIBLE
 
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
             locationViewModel.fetchLocation(this, fusedLocationClient)
         } else {
-            binding.transactionFormLocationField.text = "Location is disabled"
+            binding.transactionFormLocationField.text = "Application Location access is not granted"
             binding.transactionFormOpenInGmapsButton.visibility = View.GONE
 
             if (askPermission) {
