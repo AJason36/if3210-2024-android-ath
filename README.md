@@ -65,7 +65,7 @@ This page is to create a twibbon for user's photo.
 
 ## Screenshots
 
-## Pembagian Tugas
+## Tasks Distribution
 
 **13521044 (40hrs)**
 
