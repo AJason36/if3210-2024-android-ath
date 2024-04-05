@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.anychart.AnyChart
 import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
@@ -24,7 +23,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class ChartFragment : Fragment() {
 
     private var _binding: FragmentChartBinding? = null
-
     private val binding get() = _binding!!
     private val chartViewModel:ChartViewModel by viewModels()
     override fun onCreateView(
@@ -32,9 +30,6 @@ class ChartFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        val chartViewModel =
-                ViewModelProvider(this).get(ChartViewModel::class.java)
-
         _binding = FragmentChartBinding.inflate(inflater, container, false)
         val root: View = binding.root
 

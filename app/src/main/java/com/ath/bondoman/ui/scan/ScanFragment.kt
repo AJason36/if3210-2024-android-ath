@@ -2,6 +2,7 @@ package com.ath.bondoman.ui.scan
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -25,26 +26,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ath.bondoman.R
-import com.ath.bondoman.api.UploadClient
+import com.ath.bondoman.MainActivity
 import com.ath.bondoman.databinding.FragmentScanBinding
 import com.ath.bondoman.model.LocationData
 import com.ath.bondoman.model.dto.ApiResponse
 import com.ath.bondoman.model.dto.InsertTransactionDTO
 import com.ath.bondoman.repository.TokenRepository
-import com.ath.bondoman.repository.TransactionRepository
 import com.ath.bondoman.util.isNetworkAvailable
 import com.ath.bondoman.viewmodel.CoroutinesErrorHandler
 import com.ath.bondoman.viewmodel.LocationViewModel
-import com.ath.bondoman.viewmodel.ScanViewModel
+import com.ath.bondoman.viewmodel.TransactionViewModel
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -63,10 +59,11 @@ class ScanFragment : Fragment() {
 
     private var _binding: FragmentScanBinding? = null
     private val binding get() = _binding!!
-    private val scanViewModel :ScanViewModel by viewModels()
+//    private val scanViewModel :ScanViewModel by viewModels()
+    private val transactionViewModel:TransactionViewModel by viewModels()
     private val locationViewModel: LocationViewModel by viewModels()
 
-    @Inject lateinit var transactionRepository:TransactionRepository
+//    @Inject lateinit var transactionRepository:TransactionRepository
     private lateinit var transactionDTO:InsertTransactionDTO
 
     private var imageCapture: ImageCapture? = null
@@ -112,9 +109,9 @@ class ScanFragment : Fragment() {
         )
     }
 
-    @Inject
-    lateinit var uploadClient: UploadClient
-
+//    @Inject
+//    lateinit var uploadClient: UploadClient
+//
     @Inject
     lateinit var tokenRepository: TokenRepository
 
@@ -132,7 +129,7 @@ class ScanFragment : Fragment() {
             val body = MultipartBody.Part.createFormData("file", "file.jpg", requestFile)
             val token = tokenRepository.getToken()
             if(token!=null) {
-                scanViewModel.upload(token.token,body, object : CoroutinesErrorHandler {
+                transactionViewModel.upload(token.token,body, object : CoroutinesErrorHandler {
                     override fun onError(message: String) {
                         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                     }
@@ -144,7 +141,7 @@ class ScanFragment : Fragment() {
     }
 
     private fun saveBill(){
-        scanViewModel.insertTransaction(transactionDTO)
+        transactionViewModel.insertTransaction(transactionDTO)
     }
 
     private fun takePhoto() {
@@ -319,22 +316,26 @@ class ScanFragment : Fragment() {
 
         val saveButton = binding.saveButton
         saveButton.setOnClickListener{
+            Toast.makeText(requireContext(),"Saving to transactions..",Toast.LENGTH_SHORT).show()
             lifecycleScope.launch {
-                Toast.makeText(requireContext(),"Saving to transactions..",Toast.LENGTH_SHORT).show()
                 saveBill()
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(),"Transaction saved!", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_scanFragment_to_transactionFragment)
-                }
             }
-
         }
+
+        transactionViewModel.insertResult.observe(viewLifecycleOwner, Observer { rowId ->
+            if (rowId != null && rowId != -1L) {
+                Toast.makeText(requireContext(), "Items added to transaction successfully!", Toast.LENGTH_SHORT).show()
+                goToTransactionList()
+            } else {
+                Toast.makeText(requireContext(), "Failed to insert transaction. Please try again!", Toast.LENGTH_SHORT).show()
+            }
+        })
 
         val recyclerView: RecyclerView = binding.itemsList
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter=adapter
 
-        scanViewModel.uploadResponse.observe(viewLifecycleOwner) {response ->
+        transactionViewModel.uploadResponse.observe(viewLifecycleOwner) {response ->
             when (response) {
                 is ApiResponse.Failure -> {
                     val errorMessage = when {
@@ -348,7 +349,7 @@ class ScanFragment : Fragment() {
                 is ApiResponse.Success -> {
                     val itemsList = response.data.items.items
                     adapter.setItems(itemsList)
-                    transactionDTO = scanViewModel.createTransactionFromItems(itemsList, currentLocation)
+                    transactionDTO = transactionViewModel.createTransactionFromItems(itemsList, currentLocation)
                     switchView(false)
                     Toast.makeText(requireContext(),"Scan complete",Toast.LENGTH_SHORT).show()
                 }
@@ -363,6 +364,10 @@ class ScanFragment : Fragment() {
         return root
     }
 
+    private fun goToTransactionList() {
+        val intent = Intent(requireContext(), MainActivity::class.java)
+        startActivity(intent)
+    }
     private fun switchView(toCamera:Boolean){
         if(toCamera){
             binding.itemsList.visibility=View.GONE
